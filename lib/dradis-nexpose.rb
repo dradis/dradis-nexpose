@@ -5,3 +5,8 @@ require 'dradis-plugins'
 require 'dradis/plugins/nexpose'
 
 # Non-dradis related files
+require 'nexpose/endpoint'
+require 'nexpose/node'
+require 'nexpose/scan'
+require 'nexpose/service'
+require 'nexpose/vulnerability'
