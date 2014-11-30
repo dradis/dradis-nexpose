@@ -17,17 +17,12 @@ module Dradis::Plugins::Nexpose::Formats
       hosts = Array.new
 
       # First, extract scans
-      scan_node = @parent.children.find_or_create_by_label('Nexpose Scan Summary')
+      scan_node = content_service.create_node(label: 'Nexpose Scan Summary')
+      logger.info{ "\tProcessing scan summary" }
 
       doc.xpath('//scans/scan').each do |xml_scan|
-        note_text = process_entry('full_scan', xml_scan)
-
-        Note.create(
-          :node => scan_node,
-          :author => @author,
-          :category => @category,
-          :text => note_text
-        )
+        note_text = template_service.process_template(template: 'full_scan', data: xml_scan)
+        content_service.create_note(node: scan_node, text: note_text)
       end
 
 
@@ -35,16 +30,12 @@ module Dradis::Plugins::Nexpose::Formats
       doc.xpath('//nodes/node').each do |xml_node|
         nexpose_node = Nexpose::Node.new(xml_node)
 
-        node_node = @parent.children.find_or_create_by_label_and_type_id(nexpose_node.address, Node::Types::HOST)
+        node_node = content_service.create_node(label: nexpose_node.address, type: :host)
+        logger.info{ "\tProcessing host: #{nexpose_node.address}" }
 
         # add the summary note for this host
-        note_text = process_entry('full_node', nexpose_node)
-        Note.create(
-          :node => node_node,
-          :author => @author,
-          :category => @category,
-          :text => note_text
-        )
+        note_text = template_service.process_template(template: 'full_node', data: nexpose_node)
+        content_service.create_note(node: node_node, text: note_text)
 
         # inject this node's address into any vulnerabilities identified
         #
@@ -68,18 +59,14 @@ module Dradis::Plugins::Nexpose::Formats
         end
 
         nexpose_node.endpoints.each do |endpoint|
-          endpoint_node = node_node.children.find_or_create_by_label(endpoint.label)
+          endpoint_node = content_service.create_node(label: endpoint.label, parent: node_node)
+          logger.info{ "\t\tEndpoint: #{endpoint.label}" }
 
           endpoint.services.each do |service|
 
             # add the summary note for this service
-            note_text = process_entry('full_service', service)
-            Note.create(
-              :node => endpoint_node,
-              :author => @author,
-              :category => @category,
-              :text => note_text
-            )
+            note_text = template_service.process_template(template: 'full_service', data: service)
+            content_service.create_note(node: endpoint_node, text: note_text)
 
             # inject this node's address into any vulnerabilities identified
             service.tests.each do |service_test|
@@ -108,12 +95,13 @@ module Dradis::Plugins::Nexpose::Formats
       end
 
       # Third, parse vulnerability definitions
-      definitions = Node.create(:label => "Definitions", :parent_id => @parent.id)
+      definitions_node = content_service.create_node(label: 'Definitions')
+      logger.info{ "\tProcessing issue definitions:" }
 
       doc.xpath('//VulnerabilityDefinitions/vulnerability').each do |xml_vulnerability|
         id = xml_vulnerability['id'].downcase
         # if @vuln_list.include?(id)
-          issue_text = process_entry('full_vulnerability', xml_vulnerability)
+          issue_text = template_service.process_template(template: 'full_vulnerability', data: xml_vulnerability)
 
           # retrieve hosts affected by this issue (injected in step 2)
           #
@@ -125,17 +113,16 @@ module Dradis::Plugins::Nexpose::Formats
           # note_text << "\n\n"
 
           # 3.1 create the Issue
-          issue = Issue.create(:text => issue_text) do |i|
-            i.author = @author
-            i.node = @issuelib
-            i.category = @category
-          end
+          issue = content_service.create_issue(text: issue_text, id: id)
+          logger.info{ "\tIssue: #{issue.fields['Title']}" }
+
 
           # 3.2 associate with the nodes via Evidence.
           #   TODO: there is room for improvement here by providing proper Evidence content
           xml_vulnerability.xpath('./hosts/host').collect(&:text).each do |host_name|
-            host_node = @parent.children.where(:label => host_name, :type_id => Node::Types::HOST).first
-            host_node.evidence.create(:issue_id => issue.id, :content => "N/A")
+            # if the node exists, this just returns it
+            host_node = content_service.create_node(label: host_name, type: :host)
+            content_service.create_evidence(content: 'n/a', issue: issue, node: host_node)
           end
 
         # end
