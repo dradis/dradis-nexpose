@@ -14,21 +14,21 @@ module Dradis::Plugins::Nexpose
       else
         # XML from Plugin Manager
         if (data.name == 'scan')
-          @nexpose_object = Nexpose::Scan.new(entry)
+          @nexpose_object = Nexpose::Scan.new(data)
         elsif (data.name == 'node')
           # Full - node
-          @nexpose_object = Nexpose::Node.new(entry)
+          @nexpose_object = Nexpose::Node.new(data)
         elsif (data.name == 'service')
           # Full - service
-          @nexpose_object = Nexpose::Service.new(entry)
+          @nexpose_object = Nexpose::Service.new(data)
         else
           if data['added']
             # Full - vulnerability
-            @nexpose_object = Nexpose::Vulnerability.new(entry)
+            @nexpose_object = Nexpose::Vulnerability.new(data)
           else
             # Simple - port
             @nexpose_object = {
-              id: entry['id'],
+              id: data['id'],
               finding: data.xpath('//id').collect{ |id_node| "#{id_node['type']} : #{id_node.text}" }.join("\n")
             }
           end
