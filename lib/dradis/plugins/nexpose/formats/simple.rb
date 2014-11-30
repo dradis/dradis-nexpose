@@ -13,37 +13,22 @@ module Dradis::Plugins::Nexpose::Formats
       return if hosts.nil?
 
       hosts.each do |host|
-        host_node = @parent.children.find_or_create_by_label_and_type_id(host['address'], Node::Types::HOST)
-        Note.create(
-        :node => host_node,
-        :author => @author,
-        :category => @category,
-        :text => "Host Description : #{host['description']} \nScanner Fingerprint certainty : #{host['fingerprint']}"
-        )
+        host_node = content_service.create_node(label: host['address'], type: :host)
+        content_service.create_note node: host_node, text: "Host Description : #{host['description']} \nScanner Fingerprint certainty : #{host['fingerprint']}"
 
-        generic_findings_node = Node.create(:label => "Generic Findings", :parent_id => host_node.id )
+        generic_findings_node = content_service.create_node(label: 'Generic Findings', parent: host_node)
         host['generic_vulns'].each do |id, finding|
-          Note.create(
-          :node => generic_findings_node,
-          :author => @author,
-          :category => @category,
-          :text => "Finding ID : #{id} \n \n Finding Refs :\n-------\n #{finding}"
-          )
+          content_service.create_note node: generic_findings_node, text: "Finding ID : #{id} \n \n Finding Refs :\n-------\n #{finding}"
         end
 
         port_text = nil
         host['ports'].each do |port_label, findings|
-          port_node = Node.create(:label => port_label, :parent_id => host_node.id)
+          port_node = content_service.create_node(label: port_label, parent: host_node)
 
           findings.each do |id, finding|
-            port_text = process_entry('simple_port', {:id => id, :finding => finding})
+            port_text = template_service.process_template(template: 'simple_port', data: {id: id, finding: finding})
             port_text << "\n#[host]#\n#{host['address']}\n\n"
-            Note.create(
-            :node => port_node,
-            :author => @author,
-            :category => @category,
-            :text => port_text
-            )
+            content_service.create_note node: port_node, text: port_text
           end
         end
       end
