@@ -1,86 +1,139 @@
 require 'spec_helper'
+require 'ostruct'
 
-module NexposeUploadSpecHelper
-  XML1=<<EOXML01
-  <NeXposeSimpleXML version="1.0">
-  <generated>20111128T142609232</generated>
-  <devices>
-  <device address="1.1.1.1">
-  <fingerprint certainty="0.80">
-  <description>Linux 2.6.9-89.ELsmp</description>
-  <vendor>Linux</vendor>
-  <family>Linux</family>
-  <product>Linux</product>
-  <version>0.0.0</version>
-  <device-class></device-class>
-  <architecture>i686</architecture>
-  </fingerprint>
-  <vulnerabilities>
-  </vulnerabilities>
-  <services>
-  <service name="NTP" port="000" protocol="udp">
-  <fingerprint certainty="0.20">
-  <description>NTP 4.2</description>
-  <vendor></vendor>
-  <family>NTP</family>
-  <product>NTP</product>
-  <version>4.2</version>
-  </fingerprint>
-  <vulnerabilities>
-  <vulnerability id="ntpd-crypto" resultCode="VV">
-  <id type="cve">CVE-2009-1252</id>
-  <id type="bid">35017</id>
-  <id type="secunia">35137</id>
-  <id type="secunia">35138</id>
-  <id type="secunia">35166</id>
-  <id type="secunia">35169</id>
-  <id type="secunia">35243</id>
-  <id type="secunia">35253</id>
-  <id type="secunia">35308</id>
-  <id type="secunia">35336</id>
-  <id type="secunia">35388</id>
-  <id type="secunia">35416</id>
-  <id type="secunia">35630</id>
-  <id type="secunia">37470</id>
-  <id type="secunia">37471</id>
-  <id type="url">http://bugs.ntp.org/1151</id>
-  <id type="url">http://www.kb.cert.org/vuls/id/853097</id>
-  <id type="url">https://lists.ntp.org/pipermail/announce/2009-May/000062.html</id>
-  </vulnerability>
-  <vulnerability id="ntp-clock-radio, he cannot afford, wah wah wee wah" resultCode="VE">
-  </vulnerability>
-  </vulnerabilities>
-  </service>
-  </services>
-  </device>
-  </devices>
-  </NeXposeSimpleXML>
-EOXML01
-end
+describe 'Nexpose upload plugin' do
+  before(:each) do
+    # Stub template service
+    templates_dir = File.expand_path('../../templates', __FILE__)
+    expect_any_instance_of(Dradis::Plugins::TemplateService)
+    .to receive(:default_templates_dir).and_return(templates_dir)
 
-describe 'NexposeUpload plugin' do
-  include NexposeUploadSpecHelper
+    # Init services
+    plugin = Dradis::Plugins::Nexpose
 
-  # Breakdown of each test line:
-  # Ensure the hosts are not empty
-  # Ensure the first array row (which is a hash) has the key 'address'
-  # Ensure the first array row has the key 'fingerprint'
-  # Ensure the first array row has the key 'description'
- 
-  it 'NexposeUpload responds to all the expected fields' do
-    doc = Nokogiri::XML( NexposeUploadSpecHelper::XML1 )
-    hosts = NexposeUpload.parse_nexpose_simple_xml(doc)
-    # Begin tests
-    hosts.length.should > 0
-    hosts.first.keys.should include('address')
-    hosts.first.keys.should include('fingerprint')
-    hosts.first.keys.should include('description')
-    hosts.first.keys.should include('generic_vulns')
-    hosts.first['generic_vulns'].keys.length.should eq 0
-    hosts.first.keys.should include('ports')
-    hosts.first['ports'].keys.length >= 1
-    hosts.first['ports']["udp-000"].keys.should  include("ntpd-crypto") and ("ntp-clock-radio, he cannot afford, wah wah wee wah")
+    @content_service = Dradis::Plugins::ContentService.new(plugin: plugin)
+    template_service = Dradis::Plugins::TemplateService.new(plugin: plugin)
+
+    @importer = plugin::Importer.new(
+      content_service: @content_service,
+      template_service: template_service
+    )
+
+    # Stub dradis-plugins methods
+    #
+    # They return their argument hashes as objects mimicking
+    # Nodes, Issues, etc
+    allow(@content_service).to receive(:create_node) do |args|
+      OpenStruct.new(args)
+    end
+    allow(@content_service).to receive(:create_note) do |args|
+      OpenStruct.new(args)
+    end
+    allow(@content_service).to receive(:create_issue) do |args|
+      OpenStruct.new(args)
+    end
+    allow(@content_service).to receive(:create_evidence) do |args|
+      OpenStruct.new(args)
+    end
   end
 
-  pending 'NexposeUpload should provide access to each of its ReportItems'
+  describe "Importer: Simple" do
+    it "creates nodes, issues, notes and an evidences as needed" do
+
+      expect(@content_service).to receive(:create_node).with(hash_including label: '1.1.1.1', type: :host).once
+
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("Host Description : Linux 2.6.9-89.ELsmp")
+        expect(args[:text]).to include("Scanner Fingerprint certainty : 0.80")
+        expect(args[:node].label).to eq("1.1.1.1")
+      end.once
+
+      expect(@content_service).to receive(:create_node) do |args|
+        expect(args[:label]).to eq('Generic Findings')
+        expect(args[:parent].label).to eq("1.1.1.1")
+        OpenStruct.new(args)
+      end.once
+
+      expect(@content_service).to receive(:create_node) do |args|
+        expect(args[:label]).to eq('udp-000')
+        expect(args[:parent].label).to eq("1.1.1.1")
+        OpenStruct.new(args)
+      end.once
+
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("#[Id]#\nntpd-crypto")
+        expect(args[:text]).to include("#[host]#\n1.1.1.1")
+        expect(args[:node].label).to eq("udp-000")
+      end.once
+
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("#[Id]#\nntp-clock-radio")
+        expect(args[:text]).to include("#[host]#\n1.1.1.1")
+        expect(args[:node].label).to eq("udp-000")
+      end.once
+
+      @importer.import(file: 'spec/fixtures/files/simple.xml')
+    end
+  end
+
+  describe "Importer: Full" do
+    it "creates nodes, issues, notes and an evidences as needed" do
+
+      expect(@content_service).to receive(:create_node).with(hash_including label: "Nexpose Scan Summary").once
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("#[Title]#\nUSDA_Internal (4)")
+        expect(args[:node].label).to eq("Nexpose Scan Summary")
+      end.once
+
+      expect(@content_service).to receive(:create_node).with(hash_including label: "1.1.1.1", type: :host).once
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("#[Host]#\n1.1.1.1")
+        expect(args[:node].label).to eq("1.1.1.1")
+      end.once
+
+      expect(@content_service).to receive(:create_node) do |args|
+        expect(args[:label]).to eq("123/udp (open)")
+        expect(args[:parent].label).to eq("1.1.1.1")
+        OpenStruct.new(args)
+      end.once
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("#[Title]#\nService name: NTP")
+        expect(args[:node].label).to eq("123/udp (open)")
+      end.once
+
+      expect(@content_service).to receive(:create_node) do |args|
+        expect(args[:label]).to eq("161/udp (open)")
+        expect(args[:parent].label).to eq("1.1.1.1")
+        OpenStruct.new(args)
+      end.once
+      expect(@content_service).to receive(:create_note) do |args|
+        expect(args[:text]).to include("#[Title]#\nService name: SNMP")
+        expect(args[:node].label).to eq("161/udp (open)")
+      end.once
+
+      expect(@content_service).to receive(:create_node).with(hash_including label: "Definitions").once
+
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("#[Title]#\nApache HTTPD: error responses can expose cookies (CVE-2012-0053)")
+        expect(args[:id]).to eq("ntp-clock-variables-disclosure")
+        OpenStruct.new(args)
+      end.once
+
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("#[Title]#\nApache HTTPD: ETag Inode Information Leakage (CVE-2003-1418)")
+        expect(args[:id]).to eq("ntp-clock-variables-disclosure")
+        OpenStruct.new(args)
+      end.once
+
+      expect(@content_service).to receive(:create_node).with(hash_including label: "1.1.1.1", type: :host).once
+
+      expect(@content_service).to receive(:create_evidence) do |args|
+        expect(args[:content]).to include("n/a")
+        expect(args[:issue].id).to eq("ntp-clock-variables-disclosure")
+        expect(args[:node].label).to eq("1.1.1.1")
+      end.once
+
+      @importer.import(file: 'spec/fixtures/files/full.xml')
+    end
+  end
 end

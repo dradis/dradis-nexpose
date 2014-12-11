@@ -114,7 +114,7 @@ module Dradis::Plugins::Nexpose::Formats
 
           # 3.1 create the Issue
           issue = content_service.create_issue(text: issue_text, id: id)
-          logger.info{ "\tIssue: #{issue.fields['Title']}" }
+          logger.info{ "\tIssue: #{issue.fields ? issue.fields['Title'] : id}" }
 
 
           # 3.2 associate with the nodes via Evidence.
