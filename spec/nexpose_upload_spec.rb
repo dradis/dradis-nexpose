@@ -135,5 +135,20 @@ describe 'Nexpose upload plugin' do
 
       @importer.import(file: 'spec/fixtures/files/full.xml')
     end
+
+    # Regression test for github.com/dradis/dradis-nexpose/issues/1
+    it "populates solutions regardless they are wrapped in paragraphs or lists" do
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("#[Solution]#\nApache HTTPD >= 2.0 and < 2.0.65")
+        OpenStruct.new(args)
+      end.once
+
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("#[Solution]#\nYou can remove inode information from the ETag header")
+        OpenStruct.new(args)
+      end.once
+
+      @importer.import(file: 'spec/fixtures/files/full.xml')
+    end
   end
 end
