@@ -2,14 +2,9 @@ module Dradis::Plugins::Nexpose::Formats
 
   # This module knows how to parse Nexpose Ful XML format.
   module Full
-    def parse_full(doc)
-      parse_nexpose_full_xml(doc)
-    end
-
     private
 
-
-    def parse_nexpose_full_xml(doc)
+    def process_full(doc)
       note_text = nil
 
       @vuln_list = []

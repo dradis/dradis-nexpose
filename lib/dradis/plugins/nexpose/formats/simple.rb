@@ -2,12 +2,12 @@ module Dradis::Plugins::Nexpose::Formats
 
   # This module knows how to parse Nexpose Simple XML format.
   module Simple
-    def parse_simple(doc)
-      hosts = parse_nexpose_simple_xml(doc)
+    private
+
+    def process_simple(doc)
+      hosts = process_nexpose_simple_xml(doc)
       notes_simple(hosts)
     end
-
-    private
 
     def notes_simple(hosts)
       return if hosts.nil?
@@ -34,7 +34,7 @@ module Dradis::Plugins::Nexpose::Formats
       end
     end
 
-    def parse_nexpose_simple_xml(doc)
+    def process_nexpose_simple_xml(doc)
       results = doc.search('device')
       hosts = Array.new
       results.each do |host|

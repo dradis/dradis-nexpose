@@ -19,10 +19,10 @@ module Dradis::Plugins::Nexpose
 
       if doc.root.name == 'NeXposeSimpleXML'
         logger.info { 'NeXpose-Simple format detected' }
-        parse_simple(doc)
+        process_simple(doc)
       elsif doc.root.name == 'NexposeReport'
         logger.info { 'NeXpose-Full format detected' }
-        parse_full(doc)
+        process_full(doc)
       else
         error = "The document doesn't seem to be in either NeXpose-Simple or NeXpose-Full XML format. Ensure you uploaded a Nexpose XML report."
         logger.fatal{ error }
