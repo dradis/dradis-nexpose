@@ -1,6 +1,6 @@
 module Dradis::Plugins::Nexpose::Formats
 
-  # This module knows how to parse Nexpose Ful XML format.
+  # This module knows how to parse Nexpose Full XML format.
   module Full
     private
 
