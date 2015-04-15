@@ -49,9 +49,7 @@ module Dradis::Plugins::Nexpose::Formats
     end
 
     def process_nexpose_simple_xml(doc)
-      results = doc.search('device')
-      hosts = Array.new
-      results.each do |host|
+      doc.search('device').map do |host|
         current_host = Hash.new
         current_host['address'] = host['address']
         current_host['fingerprint'] = host.search('fingerprint')[0].nil? ? "N/A" : host.search('fingerprint')[0]['certainty']
@@ -81,10 +79,8 @@ module Dradis::Plugins::Nexpose::Formats
             end
           end
         end
-
-        hosts << current_host
+        current_host
       end
-      return hosts
     end
   end
 end
