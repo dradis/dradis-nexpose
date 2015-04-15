@@ -8,11 +8,10 @@ module Dradis::Plugins::Nexpose::Formats
       note_text = nil
 
       @vuln_list = []
-      details = {}
-      hosts = Array.new
 
       # First, extract scans
       scan_node = content_service.create_node(label: 'Nexpose Scan Summary')
+
       logger.info{ "\tProcessing scan summary" }
 
       doc.xpath('//scans/scan').each do |xml_scan|
