@@ -17,15 +17,17 @@ module Dradis::Plugins::Nexpose
       doc = Nokogiri::XML(file_content)
       logger.info { 'Done.' }
 
-      if doc.root.name == 'NeXposeSimpleXML'
+      case doc.root.name
+      when 'NeXposeSimpleXML'
         logger.info { 'NeXpose-Simple format detected' }
         process_simple(doc)
-      elsif doc.root.name == 'NexposeReport'
+      when 'NexposeReport'
         logger.info { 'NeXpose-Full format detected' }
         process_full(doc)
       else
-        error = "The document doesn't seem to be in either NeXpose-Simple or NeXpose-Full XML format. Ensure you uploaded a Nexpose XML report."
-        logger.fatal{ error }
+        error = "The document doesn't seem to be in either NeXpose-Simple or "\
+                "NeXpose-Full XML format. Ensure you uploaded a Nexpose XML report."
+        logger.fatal { error }
         content_service.create_note text: error
         return false
       end
