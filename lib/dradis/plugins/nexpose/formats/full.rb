@@ -8,7 +8,7 @@ module Dradis::Plugins::Nexpose::Formats
       note_text = nil
 
       @vuln_list = []
-      details = {}
+      evidence = Hash.new { |h, k| h[k] = {} }
       hosts = Array.new
 
       # First, extract scans
@@ -25,12 +25,18 @@ module Dradis::Plugins::Nexpose::Formats
       doc.xpath('//nodes/node').each do |xml_node|
         nexpose_node = Nexpose::Node.new(xml_node)
 
-        node_node = content_service.create_node(label: nexpose_node.address, type: :host)
+        host_node = content_service.create_node(label: nexpose_node.address, type: :host)
         logger.info{ "\tProcessing host: #{nexpose_node.address}" }
 
         # add the summary note for this host
         note_text = template_service.process_template(template: 'full_node', data: nexpose_node)
-        content_service.create_note(node: node_node, text: note_text)
+        content_service.create_note(node: host_node, text: note_text)
+
+        if host_node.respond_to?(:properties)
+          logger.info{ "\tAdding host properties: :ip and :hostnames"}
+          host_node.set_property(:ip, nexpose_node.address)
+          host_node.set_property(:hostnames, nexpose_node.names)
+        end
 
         # inject this node's address into any vulnerabilities identified
         #
@@ -54,14 +60,28 @@ module Dradis::Plugins::Nexpose::Formats
         end
 
         nexpose_node.endpoints.each do |endpoint|
-          endpoint_node = content_service.create_node(label: endpoint.label, parent: node_node)
+          # endpoint_node = content_service.create_node(label: endpoint.label, parent: host_node)
           logger.info{ "\t\tEndpoint: #{endpoint.label}" }
+
+          if host_node.respond_to?(:properties)
+            logger.info{ "\t\tAdding to Services table" }
+            host_node.set_property(:services, {
+              port: endpoint.port,
+              protocol: endpoint.protocol,
+              state: endpoint.status,
+              name: endpoint.services.map(&:name).join(', ')
+              # reason: port.reason,
+              # product: port.try('service').try('product'),
+              # version: port.try('service').try('version')
+            })
+          end
 
           endpoint.services.each do |service|
 
             # add the summary note for this service
             note_text = template_service.process_template(template: 'full_service', data: service)
-            content_service.create_note(node: endpoint_node, text: note_text)
+            # content_service.create_note(node: endpoint_node, text: note_text)
+            content_service.create_note(node: host_node, text: note_text)
 
             # inject this node's address into any vulnerabilities identified
             service.tests.each do |service_test|
@@ -82,11 +102,14 @@ module Dradis::Plugins::Nexpose::Formats
               if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
                 xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
               end
+
+              evidence[test_id][nexpose_node.address] = service_test[:content]
             end
           end
         end
 
         # add note under this node for each vulnerable ./node/test/
+        host_node.save
       end
 
       # Third, parse vulnerability definitions
@@ -117,7 +140,9 @@ module Dradis::Plugins::Nexpose::Formats
           xml_vulnerability.xpath('./hosts/host').collect(&:text).each do |host_name|
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
-            content_service.create_evidence(content: 'n/a', issue: issue, node: host_node)
+
+            evidence_content = evidence[id][host_name]
+            content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 
         # end
