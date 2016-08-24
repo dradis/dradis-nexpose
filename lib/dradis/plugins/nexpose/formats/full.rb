@@ -66,7 +66,7 @@ module Dradis::Plugins::Nexpose::Formats
           if host_node.respond_to?(:properties)
             logger.info{ "\t\tAdding to Services table" }
             host_node.set_property(:services, {
-              port: endpoint.port,
+              port: endpoint.port.to_i,
               protocol: endpoint.protocol,
               state: endpoint.status,
               name: endpoint.services.map(&:name).join(', ')
