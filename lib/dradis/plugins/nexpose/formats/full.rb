@@ -141,7 +141,7 @@ module Dradis::Plugins::Nexpose::Formats
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
 
-            evidence_content = evidence[id][host_name]
+            evidence_content = evidence[id][host_name] || "n/a"
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 
