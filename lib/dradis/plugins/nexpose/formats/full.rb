@@ -141,7 +141,8 @@ module Dradis::Plugins::Nexpose::Formats
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
 
-            evidence_content = template_service.process_template(template: 'full_evidence', data: generate_evidence_xml(evidence[id][host_name]))
+            evidence_xml = generate_evidence_xml(evidence[id][host_name])
+            evidence_content = template_service.process_template(template: 'full_evidence', data: evidence_xml)
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 
@@ -152,7 +153,7 @@ module Dradis::Plugins::Nexpose::Formats
     private
     def generate_evidence_xml content
       xml_content = "<evidence><details>#{content}</details></evidence>"
-      Nokogiri::XML(xml_content)
+      Nokogiri::XML(xml_content).xpath('./evidence').first
     end
   end
 end

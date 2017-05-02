@@ -19,7 +19,7 @@ module Nexpose
         return
       end
 
-      @xml.xpath("./details").first.try(:text)
+      @xml.xpath('./details').first.try(:text)
     end
   end
 end
