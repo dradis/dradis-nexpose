@@ -57,6 +57,8 @@ module Dradis::Plugins::Nexpose::Formats
           if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
             xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
           end
+
+          evidence[test_id][nexpose_node.address] = node_test[:content]
         end
 
         nexpose_node.endpoints.each do |endpoint|
@@ -141,7 +143,7 @@ module Dradis::Plugins::Nexpose::Formats
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
 
-            evidence_content = evidence[id][host_name] || "n/a"
+            evidence_content = evidence[id][host_name]
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 
