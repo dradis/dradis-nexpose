@@ -21,8 +21,6 @@ module Dradis::Plugins::Nexpose
         elsif (data.name == 'service')
           # Full - service
           @nexpose_object = Nexpose::Service.new(data)
-        elsif (data.name == 'evidence')
-          @nexpose_object = Nexpose::Evidence.new(data)
         else
           if data['added']
             # Full - vulnerability
