@@ -57,6 +57,8 @@ module Dradis::Plugins::Nexpose::Formats
           if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
             xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
           end
+
+          evidence[test_id][nexpose_node.address] = node_test[:content]
         end
 
         nexpose_node.endpoints.each do |endpoint|
