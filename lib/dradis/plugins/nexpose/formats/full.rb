@@ -58,7 +58,7 @@ module Dradis::Plugins::Nexpose::Formats
             xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
           end
 
-          evidence[test_id][nexpose_node.address] = node_test[:content]
+          evidence[test_id][nexpose_node.address] = node_test
         end
 
         nexpose_node.endpoints.each do |endpoint|
@@ -105,7 +105,7 @@ module Dradis::Plugins::Nexpose::Formats
                 xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
               end
 
-              evidence[test_id][nexpose_node.address] = service_test[:content]
+              evidence[test_id][nexpose_node.address] = service_test
             end
           end
         end
@@ -143,7 +143,7 @@ module Dradis::Plugins::Nexpose::Formats
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
 
-            evidence_content = template_service.process_template(template: 'full_evidence', data: xml_vulnerability)
+            evidence_content = template_service.process_template(template: 'full_evidence', data: evidence[id][host_name])
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 
