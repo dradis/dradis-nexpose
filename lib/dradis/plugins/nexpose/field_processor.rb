@@ -6,23 +6,23 @@ module Dradis::Plugins::Nexpose
 
     def post_initialize(args={})
       if data.kind_of?(Hash) ||
-          data.kind_of?(Nexpose::Scan) ||
           data.kind_of?(Nexpose::Node) ||
           data.kind_of?(Nexpose::Service) ||
+          data.kind_of?(Nexpose::Scan) ||
           data.kind_of?(Nexpose::Vulnerability)
         @nexpose_object = data
       else
         # XML from Plugin Manager
-        if (data.name == 'scan')
-          @nexpose_object = Nexpose::Scan.new(data)
-        elsif (data.name == 'node')
+        if (data.name == 'node')
           # Full - node
           @nexpose_object = Nexpose::Node.new(data)
         elsif (data.name == 'service')
           # Full - service
           @nexpose_object = Nexpose::Service.new(data)
+        elsif (data.name == 'scan')
+          @nexpose_object = Nexpose::Scan.new(data)
         elsif (data.name == 'test')
-          @nexpose_object = instantiate_evidence(data)
+          @nexpose_object = Nexpose::Test.new(data)
         else
           if data['added']
             # Full - vulnerability
@@ -86,21 +86,6 @@ module Dradis::Plugins::Nexpose
         rows << "| #{hash.collect{|_,v| v}.join(" | ")} |"
       end
       rows.join("\n")
-    end
-
-    def instantiate_evidence(data)
-      content =
-        if data.at_xpath('./Paragraph')
-          data.at_xpath('./Paragraph').text.split("\n").collect(&:strip).reject{|line| line.empty?}.join("\n")
-        else
-          'n/a'
-        end
-
-      {
-        id: data.attributes['id'],
-        status: data.attributes['status'],
-        content: content
-      }
     end
   end
 end

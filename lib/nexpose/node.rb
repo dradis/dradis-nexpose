@@ -33,16 +33,7 @@ module Nexpose
     # Convert each ./test/test entry into a simple hash
     def tests(*args)
       @xml.xpath('./tests/test').collect do |xml_test|
-        {
-          :id => xml_test.attributes['id'],
-          :status => xml_test.attributes['status'],
-          # in some cases Nexpose doesn't include text content (e.g. udp-ipid-zero)
-          :content => if (xml_para = xml_test.xpath('./Paragraph').first)
-                        xml_para.text.split("\n").collect(&:strip).reject{|line| line.empty?}.join("\n")
-                      else
-                        ""
-                      end
-        }
+        Nexpose::Test.new(xml_test)
       end
     end
 

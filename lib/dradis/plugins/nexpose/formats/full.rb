@@ -54,7 +54,7 @@ module Dradis::Plugins::Nexpose::Formats
           xml_vuln.add_child("<hosts/>") unless xml_vuln.last_element_child.name == "hosts"
 
           if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
-            xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
+            xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
           end
 
           evidence[test_id][nexpose_node.address] = node_test
@@ -101,7 +101,7 @@ module Dradis::Plugins::Nexpose::Formats
               xml_vuln.add_child("<hosts/>") unless xml_vuln.last_element_child.name == "hosts"
 
               if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
-                xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
+                xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
               end
 
               evidence[test_id][nexpose_node.address] = service_test
