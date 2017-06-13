@@ -9,7 +9,6 @@ module Dradis::Plugins::Nexpose::Formats
 
       @vuln_list = []
       evidence = Hash.new { |h, k| h[k] = {} }
-      hosts = Array.new
 
       # First, extract scans
       scan_node = content_service.create_node(label: 'Nexpose Scan Summary')
