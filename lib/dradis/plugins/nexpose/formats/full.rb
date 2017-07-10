@@ -120,7 +120,10 @@ module Dradis::Plugins::Nexpose::Formats
       doc.xpath('//VulnerabilityDefinitions/vulnerability').each do |xml_vulnerability|
         id = xml_vulnerability['id'].downcase
         # if @vuln_list.include?(id)
-          issue_text = template_service.process_template(template: 'full_vulnerability', data: xml_vulnerability)
+          issue_text = template_service.process_template(
+            template: 'full_vulnerability',
+            data: xml_vulnerability
+          )
 
           # retrieve hosts affected by this issue (injected in step 2)
           #
@@ -142,7 +145,10 @@ module Dradis::Plugins::Nexpose::Formats
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
 
-            evidence_content = template_service.process_template(template: 'full_evidence', data: evidence[id][host_name])
+            evidence_content = template_service.process_template(
+              template: 'full_evidence',
+              data: evidence[id][host_name]
+            )
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 
