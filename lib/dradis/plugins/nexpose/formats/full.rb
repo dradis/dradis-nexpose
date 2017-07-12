@@ -9,7 +9,6 @@ module Dradis::Plugins::Nexpose::Formats
 
       @vuln_list = []
       evidence = Hash.new { |h, k| h[k] = {} }
-      hosts = Array.new
 
       # First, extract scans
       scan_node = content_service.create_node(label: 'Nexpose Scan Summary')
@@ -55,10 +54,10 @@ module Dradis::Plugins::Nexpose::Formats
           xml_vuln.add_child("<hosts/>") unless xml_vuln.last_element_child.name == "hosts"
 
           if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
-            xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
+            xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
           end
 
-          evidence[test_id][nexpose_node.address] = node_test[:content]
+          evidence[test_id][nexpose_node.address] = node_test
         end
 
         nexpose_node.endpoints.each do |endpoint|
@@ -102,10 +101,10 @@ module Dradis::Plugins::Nexpose::Formats
               xml_vuln.add_child("<hosts/>") unless xml_vuln.last_element_child.name == "hosts"
 
               if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
-                xml_vuln.last_element_child.add_child( "<host>#{nexpose_node.address}</host>")
+                xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
               end
 
-              evidence[test_id][nexpose_node.address] = service_test[:content]
+              evidence[test_id][nexpose_node.address] = service_test
             end
           end
         end
@@ -121,7 +120,10 @@ module Dradis::Plugins::Nexpose::Formats
       doc.xpath('//VulnerabilityDefinitions/vulnerability').each do |xml_vulnerability|
         id = xml_vulnerability['id'].downcase
         # if @vuln_list.include?(id)
-          issue_text = template_service.process_template(template: 'full_vulnerability', data: xml_vulnerability)
+          issue_text = template_service.process_template(
+            template: 'full_vulnerability',
+            data: xml_vulnerability
+          )
 
           # retrieve hosts affected by this issue (injected in step 2)
           #
@@ -143,7 +145,10 @@ module Dradis::Plugins::Nexpose::Formats
             # if the node exists, this just returns it
             host_node = content_service.create_node(label: host_name, type: :host)
 
-            evidence_content = evidence[id][host_name]
+            evidence_content = template_service.process_template(
+              template: 'full_evidence',
+              data: evidence[id][host_name]
+            )
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
           end
 

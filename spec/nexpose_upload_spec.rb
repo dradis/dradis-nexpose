@@ -11,12 +11,13 @@ describe 'Nexpose upload plugin' do
     # Init services
     plugin = Dradis::Plugins::Nexpose
 
-    @content_service = Dradis::Plugins::ContentService.new(plugin: plugin)
-    template_service = Dradis::Plugins::TemplateService.new(plugin: plugin)
+    @content_service = Dradis::Plugins::ContentService::Base.new(
+      logger: Logger.new(STDOUT),
+      plugin: plugin
+    )
 
     @importer = plugin::Importer.new(
       content_service: @content_service,
-      template_service: template_service
     )
 
     # Stub dradis-plugins methods
@@ -92,26 +93,22 @@ describe 'Nexpose upload plugin' do
       end.once
 
       expect(@content_service).to receive(:create_node) do |args|
-        expect(args[:label]).to eq("123/udp (open)")
-        expect(args[:parent].label).to eq("1.1.1.1")
+        expect(args[:label]).to eq("Definitions")
         OpenStruct.new(args)
       end.once
       expect(@content_service).to receive(:create_note) do |args|
         expect(args[:text]).to include("#[Title]#\nService name: NTP")
-        expect(args[:node].label).to eq("123/udp (open)")
+        expect(args[:node].label).to eq("1.1.1.1")
       end.once
 
       expect(@content_service).to receive(:create_node) do |args|
-        expect(args[:label]).to eq("161/udp (open)")
-        expect(args[:parent].label).to eq("1.1.1.1")
+        expect(args[:label]).to eq("1.1.1.1")
         OpenStruct.new(args)
       end.once
       expect(@content_service).to receive(:create_note) do |args|
         expect(args[:text]).to include("#[Title]#\nService name: SNMP")
-        expect(args[:node].label).to eq("161/udp (open)")
+        expect(args[:node].label).to eq("1.1.1.1")
       end.once
-
-      expect(@content_service).to receive(:create_node).with(hash_including label: "Definitions").once
 
       expect(@content_service).to receive(:create_issue) do |args|
         expect(args[:text]).to include("#[Title]#\nApache HTTPD: error responses can expose cookies (CVE-2012-0053)")
@@ -125,10 +122,8 @@ describe 'Nexpose upload plugin' do
         OpenStruct.new(args)
       end.once
 
-      expect(@content_service).to receive(:create_node).with(hash_including label: "1.1.1.1", type: :host).once
-
       expect(@content_service).to receive(:create_evidence) do |args|
-        expect(args[:content]).to include("n/a")
+        expect(args[:content]).to include("#[ID]#\nntp-clock-variables-disclosure\n\n")
         expect(args[:issue].id).to eq("ntp-clock-variables-disclosure")
         expect(args[:node].label).to eq("1.1.1.1")
       end.once

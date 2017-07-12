@@ -1,0 +1,17 @@
+<test id="http-coldfusion-cfide-unprotected" key="/CFIDE/adminapi/base.cfc?wsdl" status="vulnerable-exploited" scan-id="4" vulnerable-since="20141110T165124356" pci-compliance-status="fail">
+  <Paragraph>
+    <UnorderedList>
+      <ListItem>Running HTTP service</ListItem>
+    </UnorderedList>
+    <Paragraph>
+      <ContainerBlockElement>
+        <ContainerBlockElement>
+          <Paragraph>HTTP GET request to
+            <URLLink LinkURL="http://10.0.0.1" LinkTitle="http://10.0.0.1"/>
+          </Paragraph>HTTP response code was an expected 200
+          <Paragraph preformat="true">2: &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+2: &lt;wsdl:definitions name="xfdregistry"</Paragraph></ContainerBlockElement>
+      </ContainerBlockElement>
+    </Paragraph>
+  </Paragraph>
+</test>

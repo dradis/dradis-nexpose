@@ -1,0 +1,8 @@
+#[ID]#
+%evidence.id%
+
+#[Status]#
+%evidence.status%
+
+#[Content]#
+%evidence.content%

@@ -29,17 +29,8 @@ module Nexpose
 
     # Convert each ./test/test entry into a simple hash
     def tests(*args)
-      @xml.xpath('./tests/test').collect do |xml_test|
-        content = if xml_test.at_xpath('./Paragraph')
-                    xml_test.at_xpath('./Paragraph').text.split("\n").collect(&:strip).reject{|line| line.empty?}.join("\n")
-                  else
-                    'n/a'
-                  end
-        {
-               id: xml_test.attributes['id'],
-           status: xml_test.attributes['status'],
-          content: content
-        }
+      @xml.xpath('./tests/test').map do |xml_test|
+        Nexpose::Test.new(xml_test)
       end
     end
 
