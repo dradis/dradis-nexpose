@@ -2,7 +2,7 @@
 
 *   No changes.
 
-### Dradis Framework 3.7 (July, 2017) ##
+## Dradis Framework 3.7 (July, 2017) ##
 
 *   Add full evidence template for exporting evidences.
 *   Fix issue resulting in Evidence with null content.
