@@ -9,3 +9,6 @@ Gemfile.lock
 
 # Gem artifacts
 /pkg/
+
+# Misc
+.DS_Store
