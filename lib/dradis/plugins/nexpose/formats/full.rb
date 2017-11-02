@@ -114,7 +114,6 @@ module Dradis::Plugins::Nexpose::Formats
       end
 
       # Third, parse vulnerability definitions
-      definitions_node = content_service.create_node(label: 'Definitions')
       logger.info{ "\tProcessing issue definitions:" }
 
       doc.xpath('//VulnerabilityDefinitions/vulnerability').each do |xml_vulnerability|
