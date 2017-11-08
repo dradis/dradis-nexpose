@@ -32,9 +32,11 @@ module Dradis::Plugins::Nexpose::Formats
         content_service.create_note(node: host_node, text: note_text)
 
         if host_node.respond_to?(:properties)
-          logger.info{ "\tAdding host properties: :ip and :hostnames"}
+          logger.info{ "\tAdding host properties to #{nexpose_node.address}"}
           host_node.set_property(:ip, nexpose_node.address)
-          host_node.set_property(:hostnames, nexpose_node.names)
+          host_node.set_property(:hostname, nexpose_node.site_name)
+          host_node.set_property(:os, nexpose_node.software)
+          host_node.save
         end
 
         # inject this node's address into any vulnerabilities identified

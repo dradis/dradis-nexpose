@@ -18,7 +18,7 @@ module Nexpose
     def supported_tags
       [
         # attributes
-        :address, :status, :device_id, :hardware_address,
+        :address, :status, :device_id, :hardware_address, :site_name,
 
         # simple tags
 
@@ -72,7 +72,8 @@ module Nexpose
       # hyphenated-case is used for some attributes
       translations_table = {
         :device_id => 'device-id',
-        :hardware_address => 'hardware-address'
+        :hardware_address => 'hardware-address',
+        :site_name => 'site-name'
       }
 
       method_name = translations_table.fetch(method, method.to_s)
