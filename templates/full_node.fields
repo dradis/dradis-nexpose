@@ -4,5 +4,6 @@ node.fingerprints
 node.hardware_address
 node.names
 node.tests
+node.site_name
 node.status
 node.software
