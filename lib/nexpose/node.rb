@@ -18,15 +18,15 @@ module Nexpose
     def supported_tags
       [
         # attributes
-        :address, :status, :device_id, :hardware_address, :site_name,
+        :address, :device_id, :hardware_address, :site_name, :status,
 
         # simple tags
 
         # multiple tags
-        :names, :fingerprints,
+        :fingerprints, :names,
 
         # compounded tags
-        :software, :tests, :endpoints
+        :endpoints, :software, :tests
       ]
     end
 
