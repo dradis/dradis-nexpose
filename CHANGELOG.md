@@ -1,8 +1,4 @@
-## Dradis Framework 3.9 (January, 2018) ##
-
-*   No changes.
-
-## Dradis Framework 3.8 (September, 2017) ##
+## Dradis Framework 3.10 (XXX, 2018) ##
 
 *   Resolve duplicate content in nested `<Paragraph>` tags
 *   Import `<URLLink>` tags as textile links
@@ -10,6 +6,14 @@
 *   Improve parsing of `<ListItem>` tags
 *   Import `vulnerability.tags` field as expected
 *   Create `hostname` and `os` Node properties (if present)
+
+## Dradis Framework 3.9 (January, 2018) ##
+
+*   No changes.
+
+## Dradis Framework 3.8 (September, 2017) ##
+
+*   No changes.
 
 ## Dradis Framework 3.7 (July, 2017) ##
 
