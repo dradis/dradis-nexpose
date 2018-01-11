@@ -1,5 +1,6 @@
 <node
   address="10.0.0.1"
+  site-name="snorby"
   status="alive"
   device-id="211"
   hardware-address="00:de:ad:be:ef:00">

@@ -1,5 +1,8 @@
-#[Host]#
+#[Title]#
 %node.address%
+
+#[Hostname]#
+%node.site_name%
 
 #[Details]#
 Status: %node.status%
