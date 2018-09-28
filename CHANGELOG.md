@@ -1,3 +1,7 @@
+## Dradis Framework 3.11 (August, 2018) ##
+
+*   Fix usage of set_property(:services) to use set_service
+
 ## Dradis Framework 3.10 (August, 2018) ##
 
 *   Resolve duplicate content in nested `<Paragraph>` tags
