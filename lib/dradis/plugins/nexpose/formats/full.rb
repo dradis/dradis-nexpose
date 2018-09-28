@@ -72,7 +72,8 @@ module Dradis::Plugins::Nexpose::Formats
               port: endpoint.port.to_i,
               protocol: endpoint.protocol,
               state: endpoint.status,
-              name: endpoint.services.map(&:name).join(', ')
+              name: endpoint.services.map(&:name).join(', '),
+              source: 'nexpose',
               # reason: port.reason,
               # product: port.try('service').try('product'),
               # version: port.try('service').try('version')
