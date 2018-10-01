@@ -1,4 +1,4 @@
-## Dradis Framework 3.11 (August, 2018) ##
+## Dradis Framework 3.10.1 (October, 2018) ##
 
 *   Fix usage of set_property(:services) to use set_service
 
