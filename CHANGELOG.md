@@ -1,4 +1,4 @@
-## Dradis Framework 3.11 (October, 2018) ##
+## Dradis Framework 3.11 (November, 2018) ##
 
 *   No changes.
 
