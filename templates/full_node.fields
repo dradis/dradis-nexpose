@@ -7,3 +7,4 @@ node.tests
 node.site_name
 node.status
 node.software
+node.risk_score

@@ -18,7 +18,7 @@ module Nexpose
     def supported_tags
       [
         # attributes
-        :address, :device_id, :hardware_address, :site_name, :status,
+        :address, :device_id, :hardware_address, :site_name, :status, :risk_score,
 
         # simple tags
 
@@ -73,7 +73,8 @@ module Nexpose
       translations_table = {
         :device_id => 'device-id',
         :hardware_address => 'hardware-address',
-        :site_name => 'site-name'
+        :site_name => 'site-name',
+        :risk_score => 'risk-score'
       }
 
       method_name = translations_table.fetch(method, method.to_s)
