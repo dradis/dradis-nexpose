@@ -88,14 +88,10 @@ describe 'Nexpose upload plugin' do
 
       expect(@content_service).to receive(:create_node).with(hash_including label: "1.1.1.1", type: :host).once
       expect(@content_service).to receive(:create_note) do |args|
-        expect(args[:text]).to include("#[Host]#\n1.1.1.1")
+        expect(args[:text]).to include("#[Title]#\n1.1.1.1")
         expect(args[:node].label).to eq("1.1.1.1")
       end.once
 
-      expect(@content_service).to receive(:create_node) do |args|
-        expect(args[:label]).to eq("Definitions")
-        OpenStruct.new(args)
-      end.once
       expect(@content_service).to receive(:create_note) do |args|
         expect(args[:text]).to include("#[Title]#\nService name: NTP")
         expect(args[:node].label).to eq("1.1.1.1")
@@ -134,12 +130,13 @@ describe 'Nexpose upload plugin' do
     # Regression test for github.com/dradis/dradis-nexpose/issues/1
     it "populates solutions regardless they are wrapped in paragraphs or lists" do
       expect(@content_service).to receive(:create_issue) do |args|
-        expect(args[:text]).to include("#[Solution]#\nApache HTTPD >= 2.0 and < 2.0.65")
+        expect(args[:text]).to include("#[Solution]#\n\nApache HTTPD >= 2.0 and < 2.0.65")
         OpenStruct.new(args)
       end.once
 
       expect(@content_service).to receive(:create_issue) do |args|
-        expect(args[:text]).to include("#[Solution]#\nYou can remove inode information from the ETag header")
+        expect(args[:text]).to include("#[Solution]#\n")
+        expect(args[:text]).to include("You can remove inode information from the ETag header")
         OpenStruct.new(args)
       end.once
 
