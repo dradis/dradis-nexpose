@@ -86,7 +86,10 @@ describe 'Nexpose upload plugin' do
         expect(args[:node].label).to eq("Nexpose Scan Summary")
       end.once
 
-      expect(@content_service).to receive(:create_node).with(hash_including label: "1.1.1.1", type: :host).once
+      expect(@content_service).to receive(:create_node).with(
+        hash_including label: "1.1.1.1", type: :host
+      ).twice
+
       expect(@content_service).to receive(:create_note) do |args|
         expect(args[:text]).to include("#[Title]#\n1.1.1.1")
         expect(args[:node].label).to eq("1.1.1.1")
@@ -97,10 +100,6 @@ describe 'Nexpose upload plugin' do
         expect(args[:node].label).to eq("1.1.1.1")
       end.once
 
-      expect(@content_service).to receive(:create_node) do |args|
-        expect(args[:label]).to eq("1.1.1.1")
-        OpenStruct.new(args)
-      end.once
       expect(@content_service).to receive(:create_note) do |args|
         expect(args[:text]).to include("#[Title]#\nService name: SNMP")
         expect(args[:node].label).to eq("1.1.1.1")
