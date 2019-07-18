@@ -4,7 +4,7 @@ node.fingerprints
 node.hardware_address
 node.names
 node.tests
+node.risk_score
 node.site_name
 node.status
 node.software
-node.risk_score
