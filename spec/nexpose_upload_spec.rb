@@ -141,5 +141,14 @@ describe 'Nexpose upload plugin' do
 
       @importer.import(file: 'spec/fixtures/files/full.xml')
     end
+
+    it "transforms html entities (&lt; and &gt;)" do
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("#[Solution]#\n\nApache HTTPD >= 2.0 and < 2.0.65")
+        OpenStruct.new(args)
+      end
+
+      @importer.import(file: 'spec/fixtures/files/full.xml')
+    end
   end
 end
