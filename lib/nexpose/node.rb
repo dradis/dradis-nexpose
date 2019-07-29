@@ -18,7 +18,7 @@ module Nexpose
     def supported_tags
       [
         # attributes
-        :address, :device_id, :hardware_address, :site_name, :status,
+        :address, :device_id, :hardware_address, :risk_score, :site_name, :status,
 
         # simple tags
 
@@ -71,9 +71,10 @@ module Nexpose
       # First we try the attributes. In Ruby we use snake_case, but in XML
       # hyphenated-case is used for some attributes
       translations_table = {
-        :device_id => 'device-id',
-        :hardware_address => 'hardware-address',
-        :site_name => 'site-name'
+        device_id: 'device-id',
+        hardware_address: 'hardware-address',
+        risk_score: 'risk-score',
+        site_name: 'site-name'
       }
 
       method_name = translations_table.fetch(method, method.to_s)
