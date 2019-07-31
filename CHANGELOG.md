@@ -1,4 +1,4 @@
-## Dradis Framework 3.14 (XXX, 2019) ##
+## Dradis Framework 3.14 (August, 2019) ##
 
 *   Add risk-score attribute to nodes
 
