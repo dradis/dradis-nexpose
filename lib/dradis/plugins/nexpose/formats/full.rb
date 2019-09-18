@@ -36,6 +36,7 @@ module Dradis::Plugins::Nexpose::Formats
           host_node.set_property(:ip, nexpose_node.address)
           host_node.set_property(:hostname, nexpose_node.site_name)
           host_node.set_property(:os, nexpose_node.software)
+          host_node.set_property(:risk_score, nexpose_node.risk_score)
           host_node.save
         end
 

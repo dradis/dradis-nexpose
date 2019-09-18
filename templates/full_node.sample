@@ -3,7 +3,8 @@
   site-name="snorby"
   status="alive"
   device-id="211"
-  hardware-address="00:de:ad:be:ef:00">
+  hardware-address="00:de:ad:be:ef:00"
+  risk-score="123">
 
   <names>
       <name>iPad.local</name>
