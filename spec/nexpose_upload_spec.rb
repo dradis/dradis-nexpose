@@ -126,6 +126,15 @@ describe 'Nexpose upload plugin' do
       @importer.import(file: 'spec/fixtures/files/full.xml')
     end
 
+    it "wraps ciphers inside ssl issues in code blocks" do
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("bc. ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256")
+        OpenStruct.new(args)
+      end.once
+
+      @importer.import(file: 'spec/fixtures/files/ssl.xml')
+    end
+
     # Regression test for github.com/dradis/dradis-nexpose/issues/1
     it "populates solutions regardless they are wrapped in paragraphs or lists" do
       expect(@content_service).to receive(:create_issue) do |args|
