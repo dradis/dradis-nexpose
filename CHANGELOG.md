@@ -1,3 +1,7 @@
+## Dradis Framework 3.15 (XXX, 2019) ##
+
+*   Wrap ciphers in code blocks
+
 ## Dradis Framework 3.14 (August, 2019) ##
 
 *   Add risk-score attribute to nodes
