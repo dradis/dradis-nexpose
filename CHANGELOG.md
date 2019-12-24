@@ -2,7 +2,7 @@
 
 * Update tag parsing to remove formatting tags
 
-## Dradis Framework 3.15 (December, 2019) ##
+## Dradis Framework 3.15 (November, 2019) ##
 
 *   Wrap ciphers in code blocks
 
