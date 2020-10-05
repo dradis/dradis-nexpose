@@ -1,3 +1,7 @@
+## Dradis Framework 3.20 (XXXX, 2020) ##
+
+*   Expand coverage for cipher wrapping
+
 ## Dradis Framework 3.19 (September, 2020) ##
 
 *   No changes.
