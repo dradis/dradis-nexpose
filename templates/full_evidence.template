@@ -1,8 +1,5 @@
-#[ID]#
-%evidence.id%
-
-#[Status]#
+#[Location]#
 %evidence.status%
 
-#[Content]#
-%evidence.content%
+#[Output]#
+bc.. %evidence.content%
