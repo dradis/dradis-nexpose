@@ -1,5 +1,9 @@
 ## Dradis Framework X.X (XXXX, 2021) ##
 
+*   Expand coverage for cipher wrapping
+
+## Dradis Framework 4.0 (August, 2021) ##
+
 *   Update HTML tag cleanup
 
 ## Dradis Framework 3.22 (April, 2021) ##
