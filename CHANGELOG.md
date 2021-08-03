@@ -1,4 +1,4 @@
-## Dradis Framework X.X (XXXX, 2021) ##
+## Dradis Framework 4.0.0 (July, 2021) ##
 
 *   Update HTML tag cleanup
 
