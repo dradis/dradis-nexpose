@@ -1,3 +1,7 @@
+## Dradis Framework 4.1.0 (XXXX, 2021) ##
+
+*   Update HTML tag cleanup to better cover `UnorderedList` and `URLLink` tags in the solution field
+
 ## Dradis Framework 4.0.0 (July, 2021) ##
 
 *   Update HTML tag cleanup
