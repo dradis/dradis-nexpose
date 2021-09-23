@@ -1,6 +1,6 @@
 ## Dradis Framework X.X (XXXX, 2021) ##
 
-*   Expand coverage for cipher wrapping
+*   Expand coverage for cipher wrapping to ssl-anon-ciphers and ssl-only-weak-ciphers
 
 ## Dradis Framework 4.0 (August, 2021) ##
 
