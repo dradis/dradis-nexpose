@@ -1,4 +1,4 @@
-v4.1.0 ([month] [YYYY])
+v4.1.0 (November 2021)
   - Update HTML tag cleanup to better cover `UnorderedList` and `URLLink` tags in the solution field
 
 v4.0.0 (July 2021)
