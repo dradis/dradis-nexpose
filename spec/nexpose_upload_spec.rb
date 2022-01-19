@@ -79,7 +79,6 @@ describe 'Nexpose upload plugin' do
 
   describe "Importer: Full" do
     it "creates nodes, issues, notes and an evidences as needed" do
-
       expect(@content_service).to receive(:create_node).with(hash_including label: "Nexpose Scan Summary").once
       expect(@content_service).to receive(:create_note) do |args|
         expect(args[:text]).to include("#[Title]#\nUSDA_Internal (4)")
@@ -122,6 +121,14 @@ describe 'Nexpose upload plugin' do
         expect(args[:issue].id).to eq("ntp-clock-variables-disclosure")
         expect(args[:node].label).to eq("1.1.1.1")
       end.once
+
+      allow_any_instance_of(OpenStruct).to receive(:respond_to?).with(:properties).and_return(true)
+      allow_any_instance_of(OpenStruct).to receive(:set_service).and_return(true)
+
+      expect_any_instance_of(OpenStruct).to receive(:set_property).with(:hostname, ['localhost:5000'])
+      expect_any_instance_of(OpenStruct).to receive(:set_property).with(:ip, '1.1.1.1')
+      expect_any_instance_of(OpenStruct).to receive(:set_property).with(:os, [])
+      expect_any_instance_of(OpenStruct).to receive(:set_property).with(:risk_score, '0.0')
 
       @importer.import(file: 'spec/fixtures/files/full.xml')
     end

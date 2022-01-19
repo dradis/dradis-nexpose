@@ -1,3 +1,6 @@
+v4.X.X (XXXX 2022)
+  - Pull the Hostname Node property from the `name` rather than `site-name` tag
+
 v4.1.0 (November 2021)
   - Update HTML tag cleanup to better cover `UnorderedList` and `URLLink` tags in the solution field
 

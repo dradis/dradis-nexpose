@@ -5,6 +5,9 @@
   </scans>
   <nodes>
     <node address="1.1.1.1" device-id="75" risk-score="0.0" scan-template="Edge Standard" site-importance="Normal" site-name="USDA_Internal" status="alive">
+      <names>
+        <name>localhost:5000</name>
+      </names>
       <fingerprints>
         <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco"/>
       </fingerprints>
