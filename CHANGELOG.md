@@ -1,4 +1,4 @@
-v4.X.X (XXXX 2022)
+v4.2.0 (February 2022)
   - Pull the Hostname Node property from the `name` rather than `site-name` tag
 
 v4.1.0 (November 2021)
