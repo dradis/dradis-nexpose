@@ -1,90 +1,72 @@
-## Dradis Framework 4.1.0 (XXXX, 2021) ##
+v4.3.0 (XXXX 2022)
+  - Update HTML tag cleanup to cover `UnorderedList` tags without spaces and double `Paragraph preformat` tags
 
-*   Update HTML tag cleanup to better cover `UnorderedList` and `URLLink` tags in the solution field
-*   Update HTML tag cleanup to cover `UnorderedList` tags without spaces and double `Paragraph preformat` tags
+v4.2.0 (February 2022)
+  - Pull the Hostname Node property from the `name` rather than `site-name` tag
 
-## Dradis Framework 4.0.0 (July, 2021) ##
+v4.1.0 (November 2021)
+  - Update HTML tag cleanup to better cover `UnorderedList` and `URLLink` tags in the solution field
 
-*   Expand coverage for cipher wrapping to ssl-anon-ciphers and ssl-only-weak-ciphers
+v4.0.0 (July 2021)
+  - Expand coverage for cipher wrapping to ssl-anon-ciphers and ssl-only-weak-ciphers
+  - Update HTML tag cleanup
 
-## Dradis Framework 4.0 (August, 2021) ##
+v3.22.0 (April 2021)
+  - No changes
 
-*   Update HTML tag cleanup
+v3.21.0 (February 2021)
+  - No changes
 
-## Dradis Framework 3.22 (April, 2021) ##
+v3.20.0 (December 2020)
+  - Expand coverage for cipher wrapping
 
-*   No changes.
+v3.19.0 (September 2020)
+  - No changes
 
-## Dradis Framework 3.21 (February, 2021) ##
+v3.18.0 (July 2020)
+  - No changes
 
-*   No changes.
+v3.17.0 (May 2020)
+  - Expand coverage for cipher wrapping
 
-## Dradis Framework 3.20 (December, 2020) ##
+v3.16.0 (February 2020)
+  - No changes
 
-*   Expand coverage for cipher wrapping
+v3.15.0 (November 2019)
+  - Wrap ciphers in code blocks
 
-## Dradis Framework 3.19 (September, 2020) ##
+v3.14.0 (August 2019)
+  - Add risk-score attribute to nodes
 
-*   No changes.
+v3.13.0 (June 2019)
+  - No changes
 
-## Dradis Framework 3.18 (July, 2020) ##
+v3.12.0 (March 2019)
+  - No changes
 
-*   No changes.
+v3.11.0 (November 2018)
+  - No changes
 
-## Dradis Framework 3.17 (May, 2020) ##
+v3.10.1 (October 2018)
+  - Fix usage of set_property(:services) to use set_service
 
-*   Expand coverage for cipher wrapping
+v3.10.0 (August 2018)
+  - Create `hostname` and `os` Node properties (if present)
+  - Improve parsing of `<ListItem>` tags
+  - Import `vulnerability.tags` field as expected
+  - Import `<Paragraph preformat="true">` tags as code blocks
+  - Import `<URLLink>` tags as textile links
+  - Resolve duplicate content in nested `<Paragraph>` tags
 
-## Dradis Framework 3.16 (February, 2020) ##
+v3.9.0 (January 2018)
+  - No changes
 
-*   No changes.
+v3.8.0 (September 2017)
+  - No changes
 
-## Dradis Framework 3.15 (November, 2019) ##
+v3.7.0 (July 2017)
+  - Add full evidence template for exporting evidences
+  - Fix issue resulting in Evidence with null content
 
-*   Wrap ciphers in code blocks
-
-## Dradis Framework 3.14 (August, 2019) ##
-
-*   Add risk-score attribute to nodes
-
-## Dradis Framework 3.13 (June, 2019) ##
-
-*   No changes.
-
-## Dradis Framework 3.12 (March, 2019) ##
-
-*   No changes.
-
-## Dradis Framework 3.11 (November, 2018) ##
-
-*   No changes.
-
-## Dradis Framework 3.10.1 (October, 2018) ##
-
-*   Fix usage of set_property(:services) to use set_service
-
-## Dradis Framework 3.10 (August, 2018) ##
-
-*   Resolve duplicate content in nested `<Paragraph>` tags
-*   Import `<URLLink>` tags as textile links
-*   Import `<Paragraph preformat="true">` tags as code blocks
-*   Improve parsing of `<ListItem>` tags
-*   Import `vulnerability.tags` field as expected
-*   Create `hostname` and `os` Node properties (if present)
-
-## Dradis Framework 3.9 (January, 2018) ##
-
-*   No changes.
-
-## Dradis Framework 3.8 (September, 2017) ##
-
-*   No changes.
-
-## Dradis Framework 3.7 (July, 2017) ##
-
-*   Add full evidence template for exporting evidences.
-*   Fix issue resulting in Evidence with null content.
-
-## Dradis Framework 3.6 (March, 2017) ##
-
-*   No changes.
+v3.6.0 (March 2017)
+  - No changes
