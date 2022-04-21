@@ -1,3 +1,6 @@
+v4.3.0 (April 2022)
+  - No changes
+
 v4.2.0 (February 2022)
   - Pull the Hostname Node property from the `name` rather than `site-name` tag
 
