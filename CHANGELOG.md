@@ -1,4 +1,7 @@
-v4.X.X (XXXX 2022)
+v4.3.0 (April 2022)
+  - Update HTML tag cleanup to cover `UnorderedList` tags without spaces and double `Paragraph preformat` tags
+
+v4.2.0 (February 2022)
   - Pull the Hostname Node property from the `name` rather than `site-name` tag
   - Parse `**` correctly and clean up `UnorderedList` tags in the description field
 
