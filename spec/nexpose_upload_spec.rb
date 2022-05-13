@@ -166,5 +166,14 @@ describe 'Nexpose upload plugin' do
 
       @importer.import(file: 'spec/fixtures/files/full.xml')
     end
+
+    it 'appends textile paragraph (p. ) to text starting with double asterisks' do
+      expect(@content_service).to receive(:create_issue) do |args|
+        expect(args[:text]).to include("p. ** DISPUTED **")
+        OpenStruct.new(args)
+      end
+
+      @importer.import(file: 'spec/fixtures/files/double_asterisks.xml')
+    end
   end
 end
