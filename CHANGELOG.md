@@ -1,15 +1,8 @@
-v4.3.0 ([month] 2023)
+[v#.#.#] ([month] [YYYY])
   - Registers template mappings locally
-  - Upgraded gems:
-    - [gem]
-  - Bugs fixes:
-    - [future tense verb] [bug fix]
-    - Bug tracker items:
-      - [item]
-  - Security Fixes:
-    - High: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Medium: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
-    - Low: (Authenticated|Unauthenticated) (admin|author|contributor) [vulnerability description]
+
+v4.3.0 (April 2022)
+  - Update HTML tag cleanup to cover `UnorderedList` tags without spaces and double `Paragraph preformat` tags
 
 v4.2.0 (February 2022)
   - Pull the Hostname Node property from the `name` rather than `site-name` tag
