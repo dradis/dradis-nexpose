@@ -1,3 +1,6 @@
+[v#.#.#] ([month] [YYYY])
+  - Registers template mappings locally
+
 v4.3.0 (April 2022)
   - Update HTML tag cleanup to cover `UnorderedList` tags without spaces and double `Paragraph preformat` tags
 

@@ -7,6 +7,10 @@ module Dradis::Plugins::Nexpose
     include Formats::Full
     include Formats::Simple
 
+    def self.templates
+      { evidence: 'full_evidence', issue: 'full_vulnerability' }
+    end
+
     # The framework will call this function if the user selects this plugin from
     # the dropdown list and uploads a file.
     # @returns true if the operation was successful, false otherwise
