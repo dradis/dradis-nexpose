@@ -1,4 +1,4 @@
-v4.X.X (XXXX 2023)
+v4.9.0 (May 2023)
   - Parse inline code, not just code blocks
   - Wrap ciphers in the `ssl-weak-message-authentication-code-algorithms` finding
 
