@@ -1,4 +1,7 @@
 v4.X.X (XXXX 2023)
+  - Parse code tags as inline code, not just paragraph preformat tags
+  
+v4.9.0 (June 2023)
   - Parse inline code, not just code blocks
   - Wrap ciphers in the `ssl-weak-message-authentication-code-algorithms` finding
 
