@@ -35,7 +35,7 @@ module Dradis::Plugins::Nexpose::Formats
           logger.info{ "\tAdding host properties to #{nexpose_node.address}"}
           host_node.set_property(:ip, nexpose_node.address)
           host_node.set_property(:hostname, nexpose_node.names)
-          host_node.set_property(:os, nexpose_node.software)
+          host_node.set_property(:os, nexpose_node.fingerprints)
           host_node.set_property(:risk_score, nexpose_node.risk_score)
           host_node.save
         end
