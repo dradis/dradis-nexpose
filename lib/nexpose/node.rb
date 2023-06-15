@@ -93,7 +93,7 @@ module Nexpose
 
         @xml.xpath(xpath_selector).collect do |xml_os|
           Hash[
-            result = xml_os.attributes.filter_map do |name, xml_attribute|
+            xml_os.attributes.filter_map do |name, xml_attribute|
               next if name == 'arch'
               [name.sub(/-/ , '_').to_sym, xml_attribute.value]
             end
