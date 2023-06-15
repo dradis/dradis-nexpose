@@ -1,6 +1,7 @@
 v4.9.0 (June 2023)
   - Parse inline code, not just code blocks
   - Wrap ciphers in the `ssl-weak-message-authentication-code-algorithms` finding
+  - Fix fingerprints field for the full_node template
 
 v4.8.0 (April 2023)
   - No changes
