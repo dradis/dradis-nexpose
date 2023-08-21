@@ -173,6 +173,7 @@ describe 'Nexpose upload plugin' do
     ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
     result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
 
-    expect(result).to include('| 0.80 | IOS | IOS | Cisco |')
+    expect(result).to include('|_. certainty |_. family |_. product |_. vendor |_. arch |')
+    expect(result).to include('| 0.80 | IOS | IOS | Cisco | x86_64 |')
   end
 end
