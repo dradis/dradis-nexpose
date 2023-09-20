@@ -1,6 +1,9 @@
-v4.10.0 (XXX 2023)
+vX.X.X (XXX 2023)
   - Fix fingerprints field for the full_node template
   - Use the details in <os> as the OS node property
+
+v4.10.0 (September 2023)
+  - Update gemspec links
 
 v4.9.0 (June 2023)
   - Parse inline code, not just code blocks
