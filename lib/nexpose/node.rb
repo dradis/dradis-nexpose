@@ -91,14 +91,10 @@ module Nexpose
           'software' => './software/fingerprint'
         }[method_name]
 
-        @xml.xpath(xpath_selector).collect do |xml_os|
-          Hash[
-            xml_os.attributes.filter_map do |name, xml_attribute|
-              next if name == 'arch'
-              [name.sub(/-/ , '_').to_sym, xml_attribute.value]
-            end
-          ]
-        end
+        xml_os = @xml.at_xpath(xpath_selector)
+        return '' if xml_os.nil?
+
+        xml_os.attributes['product'].value
       else
         # nothing found, the tag is valid but not present in this ReportItem
         return nil

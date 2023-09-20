@@ -131,9 +131,7 @@ describe 'Nexpose upload plugin' do
 
         @importer.import(file: @fixtures_dir + '/full.xml')
 
-        expect(Node.find_by(label: '1.1.1.1').properties[:os]).to eq(
-          { 'certainty' => '0.80', 'family' => 'IOS', 'product' => 'IOS', 'vendor' => 'Cisco' }
-        )
+        expect(Node.find_by(label: '1.1.1.1').properties[:os]).to eq('IOS')
       end
 
       it 'wraps ciphers inside ssl issues in code blocks' do
@@ -179,6 +177,6 @@ describe 'Nexpose upload plugin' do
     ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
     result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
 
-    expect(result).to include('| 0.80 | IOS | IOS | Cisco |')
+    expect(result).to include('IOS')
   end
 end
