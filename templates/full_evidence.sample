@@ -1,4 +1,6 @@
 <test id="http-coldfusion-cfide-unprotected" key="/CFIDE/adminapi/base.cfc?wsdl" status="vulnerable-exploited" scan-id="4" vulnerable-since="20141110T165124356" pci-compliance-status="fail">
+  <endpoint port="123" protocol="udp" status="open" />
+
   <Paragraph>
     <UnorderedList>
       <ListItem>Running HTTP service</ListItem>
