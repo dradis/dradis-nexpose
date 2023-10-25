@@ -8,7 +8,6 @@ module Nexpose
   # Instead of providing separate methods for each supported property we rely
   # on Ruby's #method_missing to do most of the work.
   class Service
-    attr_accessor :endpoint
     # Accepts an XML node from Nokogiri::XML.
     def initialize(args = {})
       @xml = args.fetch(:xml_node)
