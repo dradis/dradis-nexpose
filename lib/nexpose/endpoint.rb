@@ -39,7 +39,7 @@ module Nexpose
     # Nexpose::Service objects
     def services
       @xml.xpath('./services/service').map do |xml_service|
-        Service.new(xml_service, endpoint: { port: port, protocol: protocol })
+        Service.new(xml_node: xml_service)
       end
     end
 

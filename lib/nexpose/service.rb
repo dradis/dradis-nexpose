@@ -8,10 +8,11 @@ module Nexpose
   # Instead of providing separate methods for each supported property we rely
   # on Ruby's #method_missing to do most of the work.
   class Service
+    attr_accessor :endpoint
     # Accepts an XML node from Nokogiri::XML.
-    def initialize(xml_node, endpoint: nil)
-      @xml = xml_node
-      @endpoint = endpoint
+    def initialize(args = {})
+      @xml = args.fetch(:xml_node)
+      # @endpoint = args.fetch(:endpoint, nil)
     end
 
     # List of supported tags. They can be attributes, simple descendans or
@@ -32,9 +33,9 @@ module Nexpose
     def tests(*args)
       @xml.xpath('./tests/test').map do |xml_test|
         # Inject evidence with data from the node
-        xml_test.add_child(
-          "<endpoint port='#{@endpoint[:port]}' protocol='#{@endpoint[:protocol]}' />"
-        )
+        # xml_test.add_child(
+        #   "<endpoint port='#{endpoint[:port]}' protocol='#{endpoint[:protocol]}' />"
+        # )
 
         Nexpose::Test.new(xml_test)
       end

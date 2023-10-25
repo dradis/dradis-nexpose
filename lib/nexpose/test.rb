@@ -13,13 +13,24 @@ module Nexpose
           'n/a'
         end
 
-      {
-        id: xml_node.attributes['id'],
-        status: xml_node.attributes['status'],
-        content: content,
-        port: xml_node.at_xpath('./endpoint/@port').value,
-        protocol: xml_node.at_xpath('./endpoint/@protocol').value
-      }
+        
+        data = {
+          id: xml_node.attributes['id'],
+          status: xml_node.attributes['status'],
+          content: content,
+        }
+        
+        if xml_node.at_xpath('./endpoint/@port')
+          port = xml_node.at_xpath('./endpoint/@port').value
+          data[:port] = port
+        end
+
+        if xml_node.at_xpath('./endpoint/@protocol')
+          protocol = xml_node.at_xpath('./endpoint/@protocol').value
+          data[:protocol] = protocol
+        end
+
+      data
     end
   end
 end

@@ -109,6 +109,8 @@ module Dradis::Plugins::Nexpose::Formats
               end
 
               evidence[test_id][nexpose_node.address] = service_test
+              evidence[test_id][nexpose_node.address][:port] = endpoint.port
+              evidence[test_id][nexpose_node.address][:protocol] = endpoint.protocol
             end
           end
         end
