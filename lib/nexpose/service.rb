@@ -10,7 +10,7 @@ module Nexpose
   class Service
     # Accepts an XML node from Nokogiri::XML.
     def initialize(xml_node)
-      @xml = args.fetch(:xml_node)
+      @xml = xml_node
     end
 
     # List of supported tags. They can be attributes, simple descendans or
