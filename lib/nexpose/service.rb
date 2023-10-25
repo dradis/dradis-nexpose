@@ -12,7 +12,6 @@ module Nexpose
     # Accepts an XML node from Nokogiri::XML.
     def initialize(args = {})
       @xml = args.fetch(:xml_node)
-      # @endpoint = args.fetch(:endpoint, nil)
     end
 
     # List of supported tags. They can be attributes, simple descendans or
@@ -32,11 +31,6 @@ module Nexpose
     # Convert each ./test/test entry into a simple hash
     def tests(*args)
       @xml.xpath('./tests/test').map do |xml_test|
-        # Inject evidence with data from the node
-        # xml_test.add_child(
-        #   "<endpoint port='#{endpoint[:port]}' protocol='#{endpoint[:protocol]}' />"
-        # )
-
         Nexpose::Test.new(xml_test)
       end
     end

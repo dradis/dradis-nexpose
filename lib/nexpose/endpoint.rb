@@ -38,9 +38,7 @@ module Nexpose
     # Each of the services associated with this endpoint. Returns an array of
     # Nexpose::Service objects
     def services
-      @xml.xpath('./services/service').map do |xml_service|
-        Service.new(xml_node: xml_service)
-      end
+      @xml.xpath('./services/service').collect { |xml_service| Service.new(xml_service) }
     end
 
     # This allows external callers (and specs) to check for implemented
