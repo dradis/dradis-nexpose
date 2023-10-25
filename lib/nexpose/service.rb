@@ -9,7 +9,7 @@ module Nexpose
   # on Ruby's #method_missing to do most of the work.
   class Service
     # Accepts an XML node from Nokogiri::XML.
-    def initialize(args = {})
+    def initialize(xml_node)
       @xml = args.fetch(:xml_node)
     end
 
