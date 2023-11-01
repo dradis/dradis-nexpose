@@ -1,5 +1,4 @@
 vX.X.X (XXX 2023)
-  - Fix fingerprints field for the full_node template
   - Use the details in <os> as the OS node property
 
 v4.10.0 (September 2023)
