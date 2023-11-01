@@ -1,6 +1,9 @@
 v#.#.# (MMMM YYYY)
   - Add support for tests that start with `ContainerBlockElement` tag rather than `Paragraph`
 
+v4.10.0 (September 2023)
+  - Update gemspec links
+
 v4.9.0 (June 2023)
   - Parse inline code, not just code blocks
   - Wrap ciphers in the `ssl-weak-message-authentication-code-algorithms` finding
