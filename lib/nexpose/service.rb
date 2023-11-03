@@ -8,6 +8,8 @@ module Nexpose
   # Instead of providing separate methods for each supported property we rely
   # on Ruby's #method_missing to do most of the work.
   class Service
+    attr_accessor :endpoint, :xml
+
     # Accepts an XML node from Nokogiri::XML.
     def initialize(xml_node, endpoint: nil)
       @xml = xml_node
@@ -30,11 +32,11 @@ module Nexpose
 
     # Convert each ./test/test entry into a simple hash
     def tests(*args)
-      @xml.xpath('./tests/test').map do |xml_test|
+      xml.xpath('./tests/test').map do |xml_test|
         # Inject evidence with data from the node
-        xml_test.add_child(
-          "<endpoint port='#{@endpoint[:port]}' protocol='#{@endpoint[:protocol]}' />"
-        )
+
+        xml_test['port'] = endpoint[:port]
+        xml_test['protocol'] = endpoint[:protocol]
 
         Nexpose::Test.new(xml_test)
       end
@@ -68,7 +70,7 @@ module Nexpose
       translations_table = {}
 
       method_name = translations_table.fetch(method, method.to_s)
-      return @xml.attributes[method_name].value if @xml.attributes.key?(method_name)
+      return xml.attributes[method_name].value if xml.attributes.key?(method_name)
 
       # Finally the enumerations: references, tags
       if ['fingerprints', 'configurations'].include?(method_name)
@@ -77,7 +79,7 @@ module Nexpose
           'configurations' => './configuration/config'
         }[method_name]
 
-        @xml.xpath(xpath_selector).collect do |xml_item|
+        xml.xpath(xpath_selector).collect do |xml_item|
           { text: xml_item.text }.merge(
             Hash[
               xml_item.attributes.collect do |name, xml_attribute|

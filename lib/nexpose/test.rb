@@ -17,8 +17,8 @@ module Nexpose
         id: xml_node.attributes['id'],
         status: xml_node.attributes['status'],
         content: content,
-        port: xml_node.at_xpath('./endpoint/@port').value,
-        protocol: xml_node.at_xpath('./endpoint/@protocol').value
+        port: xml_node.attributes['port'],
+        protocol: xml_node.attributes['protocol']
       }
     end
   end
