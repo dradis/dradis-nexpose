@@ -19,18 +19,11 @@ module Nexpose
           status: xml_node.attributes['status'],
           content: content,
         }
-        
-        if xml_node.at_xpath('./endpoint/@port')
-          port = xml_node.at_xpath('./endpoint/@port').value
-          data[:port] = port
-        end
 
-        if xml_node.at_xpath('./endpoint/@protocol')
-          protocol = xml_node.at_xpath('./endpoint/@protocol').value
-          data[:protocol] = protocol
-        end
+        data.merge!({ port: xml_node.at_xpath('./endpoint/@port').value }) if xml_node.at_xpath('./endpoint/@port')
+        data.merge!({ protocol: xml_node.at_xpath('./endpoint/@protocol').value }) if xml_node.at_xpath('./endpoint/@protocol')
 
-      data
+        data
     end
   end
 end
