@@ -2,24 +2,21 @@ module Nexpose
   class Test
     def self.new(xml_node)
       content =
-        if xml_node.at_xpath('./Paragraph')
-          xml_node.
-            at_xpath('./Paragraph').
-            text.
-            split("\n").
-            collect(&:strip).
-            reject { |line| line.empty? }.join("\n")
-        elsif xml_node.at_xpath('./ContainerBlockElement')
-          #Tests that start with <ContainerBlockElement> tags may contain URLLink tags that need to be separately parsed
-          result = xml_node.at_xpath('./ContainerBlockElement').to_s
-          result.gsub!(/<URLLink(.*)LinkURL=\"(.*?)\"(.*?)>(.*?)<\/URLLink>/im) { "\"#{$4.strip}\":#{$2.strip} " }
-          result.gsub!(/<URLLink LinkTitle=\"(.*?)\"(.*?)LinkURL=\"(.*?)\"\/>/i) { "\"#{$1.strip}\":#{$3.strip} " }
-          result.gsub!(/<URLLink LinkURL=\"(.*?)\"(.*?)LinkTitle=\"(.*?)\"\/>/i) { "\"#{$3.strip}\":#{$1.strip} " }
-          result.gsub!(/<ContainerBlockElement>(.*?)<\/ContainerBlockElement>/m){|m| "#{ $1 }\n"}
-          result.gsub!(/<Paragraph>(.*?)<\/Paragraph>/m){|m| "#{ $1 }\n"}
-          result.gsub!(/<Paragraph>|<\/Paragraph>/, '')
-          result.gsub!(/^\s+/, "")
-          result
+        # get first Paragraph or ContainerBlockElement that's a direct child of <test>
+        if xml = xml_node.at_xpath('./Paragraph | ./ContainerBlockElement')
+          # get all nested paragraph elements
+          nested_paragraphs = xml.xpath('.//Paragraph')
+          content = []
+
+          nested_paragraphs.children.each do |node|
+            case node.name
+            when 'text'
+              content << node.text.strip
+            when 'URLLink'
+              content << node['LinkURL']
+            end
+          end
+          content.map(&:strip).reject(&:empty?).join("\n")
         else
           'n/a'
         end
