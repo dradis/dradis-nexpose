@@ -1,5 +1,4 @@
 module Dradis::Plugins::Nexpose::Formats
-
   # This module knows how to parse Nexpose Ful XML format.
   module Full
     private
@@ -12,30 +11,29 @@ module Dradis::Plugins::Nexpose::Formats
 
       # First, extract scans
       scan_node = content_service.create_node(label: 'Nexpose Scan Summary')
-      logger.info{ "\tProcessing scan summary" }
+      logger.info { "\tProcessing scan summary" }
 
       doc.xpath('//scans/scan').each do |xml_scan|
         note_text = template_service.process_template(template: 'full_scan', data: xml_scan)
         content_service.create_note(node: scan_node, text: note_text)
       end
 
-
       # Second, we parse the nodes
       doc.xpath('//nodes/node').each do |xml_node|
         nexpose_node = Nexpose::Node.new(xml_node)
 
         host_node = content_service.create_node(label: nexpose_node.address, type: :host)
-        logger.info{ "\tProcessing host: #{nexpose_node.address}" }
+        logger.info { "\tProcessing host: #{nexpose_node.address}" }
 
         # add the summary note for this host
         note_text = template_service.process_template(template: 'full_node', data: nexpose_node)
         content_service.create_note(node: host_node, text: note_text)
 
         if host_node.respond_to?(:properties)
-          logger.info{ "\tAdding host properties to #{nexpose_node.address}"}
+          logger.info { "\tAdding host properties to #{nexpose_node.address}" }
           host_node.set_property(:ip, nexpose_node.address)
           host_node.set_property(:hostname, nexpose_node.names)
-          host_node.set_property(:os, nexpose_node.software)
+          host_node.set_property(:os, nexpose_node.fingerprints)
           host_node.set_property(:risk_score, nexpose_node.risk_score)
           host_node.save
         end
@@ -54,7 +52,7 @@ module Dradis::Plugins::Nexpose::Formats
           # See:
           #   http://stackoverflow.com/questions/1625446/problem-with-upper-case-and-lower-case-xpath-functions-in-selenium-ide/1625859#1625859
           xml_vuln = doc.xpath("//VulnerabilityDefinitions/vulnerability[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='#{test_id}']").first
-          xml_vuln.add_child("<hosts/>") unless xml_vuln.last_element_child.name == "hosts"
+          xml_vuln.add_child('<hosts/>') unless xml_vuln.last_element_child.name == 'hosts'
 
           if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
             xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
@@ -65,10 +63,10 @@ module Dradis::Plugins::Nexpose::Formats
 
         nexpose_node.endpoints.each do |endpoint|
           # endpoint_node = content_service.create_node(label: endpoint.label, parent: host_node)
-          logger.info{ "\t\tEndpoint: #{endpoint.label}" }
+          logger.info { "\t\tEndpoint: #{endpoint.label}" }
 
           if host_node.respond_to?(:properties)
-            logger.info{ "\t\tAdding to Services table" }
+            logger.info { "\t\tAdding to Services table" }
             host_node.set_service(
               port: endpoint.port.to_i,
               protocol: endpoint.protocol,
@@ -102,7 +100,7 @@ module Dradis::Plugins::Nexpose::Formats
               #   http://stackoverflow.com/questions/1625446/problem-with-upper-case-and-lower-case-xpath-functions-in-selenium-ide/1625859#1625859
               #
               xml_vuln = doc.xpath("//VulnerabilityDefinitions/vulnerability[translate(@id,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz')='#{test_id}']").first
-              xml_vuln.add_child("<hosts/>") unless xml_vuln.last_element_child.name == "hosts"
+              xml_vuln.add_child('<hosts/>') unless xml_vuln.last_element_child.name == 'hosts'
 
               if xml_vuln.xpath("./hosts/host[text()='#{nexpose_node.address}']").empty?
                 xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
@@ -118,42 +116,41 @@ module Dradis::Plugins::Nexpose::Formats
       end
 
       # Third, parse vulnerability definitions
-      logger.info{ "\tProcessing issue definitions:" }
+      logger.info { "\tProcessing issue definitions:" }
 
       doc.xpath('//VulnerabilityDefinitions/vulnerability').each do |xml_vulnerability|
         id = xml_vulnerability['id'].downcase
         # if @vuln_list.include?(id)
-          issue_text = template_service.process_template(
-            template: 'full_vulnerability',
-            data: xml_vulnerability
+        issue_text = template_service.process_template(
+          template: 'full_vulnerability',
+          data: xml_vulnerability
+        )
+
+        # retrieve hosts affected by this issue (injected in step 2)
+        #
+        # There is no need for the below as Issues are linked to hosts via the
+        # corresponding Evidence instance
+        #
+        # note_text << "\n\n#[host]#\n"
+        # note_text << xml_vulnerability.xpath('./hosts/host').collect(&:text).join("\n")
+        # note_text << "\n\n"
+
+        # 3.1 create the Issue
+        issue = content_service.create_issue(text: issue_text, id: id)
+        logger.info { "\tIssue: #{issue.fields ? issue.fields['Title'] : id}" }
+
+        # 3.2 associate with the nodes via Evidence.
+        #   TODO: there is room for improvement here by providing proper Evidence content
+        xml_vulnerability.xpath('./hosts/host').collect(&:text).each do |host_name|
+          # if the node exists, this just returns it
+          host_node = content_service.create_node(label: host_name, type: :host)
+
+          evidence_content = template_service.process_template(
+            template: 'full_evidence',
+            data: evidence[id][host_name]
           )
-
-          # retrieve hosts affected by this issue (injected in step 2)
-          #
-          # There is no need for the below as Issues are linked to hosts via the
-          # corresponding Evidence instance
-          #
-          # note_text << "\n\n#[host]#\n"
-          # note_text << xml_vulnerability.xpath('./hosts/host').collect(&:text).join("\n")
-          # note_text << "\n\n"
-
-          # 3.1 create the Issue
-          issue = content_service.create_issue(text: issue_text, id: id)
-          logger.info{ "\tIssue: #{issue.fields ? issue.fields['Title'] : id}" }
-
-
-          # 3.2 associate with the nodes via Evidence.
-          #   TODO: there is room for improvement here by providing proper Evidence content
-          xml_vulnerability.xpath('./hosts/host').collect(&:text).each do |host_name|
-            # if the node exists, this just returns it
-            host_node = content_service.create_node(label: host_name, type: :host)
-
-            evidence_content = template_service.process_template(
-              template: 'full_evidence',
-              data: evidence[id][host_name]
-            )
-            content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
-          end
+          content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
+        end
 
         # end
       end

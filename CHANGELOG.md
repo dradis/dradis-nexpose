@@ -1,3 +1,6 @@
+vX.X.X (XXX 2023)
+  - Use the details in <os> as the OS node property
+
 v4.10.0 (September 2023)
   - Update gemspec links
 
