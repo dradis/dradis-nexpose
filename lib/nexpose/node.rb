@@ -43,10 +43,9 @@ module Nexpose
       @xml.xpath('./endpoints/endpoint').collect { |xml_endpoint| Endpoint.new(xml_endpoint) }
     end
 
-
     # This allows external callers (and specs) to check for implemented
     # properties
-    def respond_to?(method, include_private=false)
+    def respond_to?(method, include_private = false)
       return true if supported_tags.include?(method.to_sym)
       super
     end
@@ -58,7 +57,6 @@ module Nexpose
     # attribute, simple descendent or collection that it maps to in the XML
     # tree.
     def method_missing(method, *args)
-
       # We could remove this check and return nil for any non-recognized tag.
       # The problem would be that it would make tricky to debug problems with
       # typos. For instance: <>.potr would return nil instead of raising an
@@ -84,7 +82,7 @@ module Nexpose
 
       # Finally the enumerations: names
       if method_name == 'names'
-        @xml.xpath("./names/name").collect(&:text)
+        @xml.xpath('./names/name').collect(&:text)
 
       elsif ['fingerprints', 'software'].include?(method_name)
 
@@ -93,14 +91,10 @@ module Nexpose
           'software' => './software/fingerprint'
         }[method_name]
 
-        @xml.xpath(xpath_selector).collect do |xml_os|
-          Hash[
-            xml_os.attributes.collect do |name, xml_attribute|
-              next if name == 'arch'
-              [name.sub(/-/,'_').to_sym, xml_attribute.value]
-            end
-          ]
-        end
+        xml_os = @xml.at_xpath(xpath_selector)
+        return '' if xml_os.nil?
+
+        xml_os.attributes['product'].value
       else
         # nothing found, the tag is valid but not present in this ReportItem
         return nil
