@@ -11,6 +11,9 @@ module Nexpose
     attr_accessor :endpoint, :xml
 
     # Accepts an XML node from Nokogiri::XML.
+    #
+    # endpoint - If the Service is instantiated from the Endpoint class (e.g.
+    # from <endpoint><services>...) , it will have access to the parent data.
     def initialize(xml_node, endpoint: nil)
       @xml = xml_node
       @endpoint = endpoint
@@ -34,7 +37,6 @@ module Nexpose
     def tests(*args)
       xml.xpath('./tests/test').map do |xml_test|
         # Inject evidence with data from the node
-
         xml_test['port'] = endpoint[:port]
         xml_test['protocol'] = endpoint[:protocol]
 
