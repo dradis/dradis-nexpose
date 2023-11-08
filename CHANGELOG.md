@@ -1,4 +1,6 @@
-v#.#.# (MMMM YYYY)
+v4.11.0 (XXX 2023)
+  - Add port/protocol to evidences
+  - Use the details in <os> as the OS node property
   - Add support for tests that start with `ContainerBlockElement`
 
 v4.10.0 (September 2023)

@@ -8,7 +8,6 @@ module Nexpose
   # Instead of providing separate methods for each supported property we rely
   # on Ruby's #method_missing to do most of the work.
   class Endpoint
-
     # Accepts an XML node from Nokogiri::XML.
     def initialize(xml_node)
       @xml = xml_node
@@ -39,13 +38,14 @@ module Nexpose
     # Each of the services associated with this endpoint. Returns an array of
     # Nexpose::Service objects
     def services
-      @xml.xpath('./services/service').collect { |xml_service| Service.new(xml_service) }
+      @xml.xpath('./services/service').map do |xml_service|
+        Service.new(xml_service, endpoint: { port: port, protocol: protocol })
+      end
     end
-
 
     # This allows external callers (and specs) to check for implemented
     # properties
-    def respond_to?(method, include_private=false)
+    def respond_to?(method, include_private = false)
       return true if supported_tags.include?(method.to_sym)
       super
     end
@@ -57,7 +57,6 @@ module Nexpose
     # attribute, simple descendent or collection that it maps to in the XML
     # tree.
     def method_missing(method, *args)
-
       # We could remove this check and return nil for any non-recognized tag.
       # The problem would be that it would make tricky to debug problems with
       # typos. For instance: <>.potr would return nil instead of raising an
@@ -69,8 +68,7 @@ module Nexpose
 
       # First we try the attributes. In Ruby we use snake_case, but in XML
       # CamelCase is used for some attributes
-      translations_table = {
-      }
+      translations_table = {}
 
       method_name = translations_table.fetch(method, method.to_s)
       return @xml.attributes[method_name].value if @xml.attributes.key?(method_name)

@@ -24,7 +24,9 @@ module Nexpose
       {
         id: xml_node.attributes['id'],
         status: xml_node.attributes['status'],
-        content: content
+        content: content,
+        port: xml_node.attributes['port'],
+        protocol: xml_node.attributes['protocol']
       }
     end
   end
