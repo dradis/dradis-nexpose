@@ -1,5 +1,5 @@
 v#.#.# (MMMM YYYY)
-  - Add support for tests that start with `ContainerBlockElement` tag rather than `Paragraph`
+  - Add support for tests that start with `ContainerBlockElement`
 
 v4.10.0 (September 2023)
   - Update gemspec links
