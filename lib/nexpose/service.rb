@@ -8,9 +8,15 @@ module Nexpose
   # Instead of providing separate methods for each supported property we rely
   # on Ruby's #method_missing to do most of the work.
   class Service
+    attr_accessor :endpoint, :xml
+
     # Accepts an XML node from Nokogiri::XML.
-    def initialize(xml_node)
+    #
+    # endpoint - If the Service is instantiated from the Endpoint class (e.g.
+    # from <endpoint><services>...) , it will have access to the parent data.
+    def initialize(xml_node, endpoint: nil)
       @xml = xml_node
+      @endpoint = endpoint
     end
 
     # List of supported tags. They can be attributes, simple descendans or
@@ -29,15 +35,18 @@ module Nexpose
 
     # Convert each ./test/test entry into a simple hash
     def tests(*args)
-      @xml.xpath('./tests/test').map do |xml_test|
+      xml.xpath('./tests/test').map do |xml_test|
+        # Inject evidence with data from the node
+        xml_test['port'] = endpoint[:port]
+        xml_test['protocol'] = endpoint[:protocol]
+
         Nexpose::Test.new(xml_test)
       end
     end
 
-
     # This allows external callers (and specs) to check for implemented
     # properties
-    def respond_to?(method, include_private=false)
+    def respond_to?(method, include_private = false)
       return true if supported_tags.include?(method.to_sym)
       super
     end
@@ -49,7 +58,6 @@ module Nexpose
     # attribute, simple descendent or collection that it maps to in the XML
     # tree.
     def method_missing(method, *args)
-
       # We could remove this check and return nil for any non-recognized tag.
       # The problem would be that it would make tricky to debug problems with
       # typos. For instance: <>.potr would return nil instead of raising an
@@ -61,11 +69,10 @@ module Nexpose
 
       # First we try the attributes. In Ruby we use snake_case, but in XML
       # CamelCase is used for some attributes
-      translations_table = {
-      }
+      translations_table = {}
 
       method_name = translations_table.fetch(method, method.to_s)
-      return @xml.attributes[method_name].value if @xml.attributes.key?(method_name)
+      return xml.attributes[method_name].value if xml.attributes.key?(method_name)
 
       # Finally the enumerations: references, tags
       if ['fingerprints', 'configurations'].include?(method_name)
@@ -74,11 +81,11 @@ module Nexpose
           'configurations' => './configuration/config'
         }[method_name]
 
-        @xml.xpath(xpath_selector).collect do |xml_item|
-          {:text => xml_item.text}.merge(
+        xml.xpath(xpath_selector).collect do |xml_item|
+          { text: xml_item.text }.merge(
             Hash[
               xml_item.attributes.collect do |name, xml_attribute|
-                [name.sub(/-/,'_').to_sym, xml_attribute.value]
+                [name.sub(/-/, '_').to_sym, xml_attribute.value]
               end
             ]
           )

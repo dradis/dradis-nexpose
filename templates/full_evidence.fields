@@ -1,3 +1,5 @@
 evidence.id
 evidence.status
 evidence.content
+evidence.port
+evidence.protocol

@@ -1,5 +1,10 @@
-v#.#.# (MMMM YYYY)
+v4.11.0 (XXX 2023)
+  - Add port/protocol to evidences
+  - Use the details in <os> as the OS node property
   - Import `vulnerability.risk_score` as a new Issue field
+  
+v4.10.0 (September 2023)
+  - Update gemspec links
 
 v4.9.0 (June 2023)
   - Parse inline code, not just code blocks
