@@ -94,7 +94,12 @@ module Nexpose
         xml_os = @xml.at_xpath(xpath_selector)
         return '' if xml_os.nil?
 
-        xml_os.attributes['product'].value
+        if xml_os.attributes['product'].nil? #when the first os tag has no product
+          xml_os.next_element.attributes['product'].value #return the product from the next os
+        else
+          xml_os.attributes['product'].value
+        end
+
       else
         # nothing found, the tag is valid but not present in this ReportItem
         return nil
