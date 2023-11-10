@@ -106,7 +106,8 @@ module Dradis::Plugins::Nexpose::Formats
                 xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
               end
 
-              evidence[test_id][nexpose_node.address] = service_test
+              evidence[test_id][nexpose_node.address] ||= []
+              evidence[test_id][nexpose_node.address] << service_test
             end
           end
         end
@@ -141,15 +142,17 @@ module Dradis::Plugins::Nexpose::Formats
 
         # 3.2 associate with the nodes via Evidence.
         #   TODO: there is room for improvement here by providing proper Evidence content
-        xml_vulnerability.xpath('./hosts/host').collect(&:text).each do |host_name|
+        xml_vulnerability.xpath('./hosts/host').map(&:text).each do |host_name|
           # if the node exists, this just returns it
           host_node = content_service.create_node(label: host_name, type: :host)
 
-          evidence_content = template_service.process_template(
-            template: 'full_evidence',
-            data: evidence[id][host_name]
-          )
-          content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
+          evidence[id][host_name].each do |evidence|
+            evidence_content = template_service.process_template(
+              template: 'full_evidence',
+              data: evidence
+            )
+            content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
+          end
         end
 
         # end
