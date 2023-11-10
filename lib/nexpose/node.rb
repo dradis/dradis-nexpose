@@ -91,24 +91,10 @@ module Nexpose
           'software' => './software/fingerprint'
         }[method_name]
 
-        xml_os = @xml.at_xpath(xpath_selector)
+        xml_os = @xml.xpath(xpath_selector)
         return '' if xml_os.nil?
-
-        if xml_os.attributes['product'].nil? #when the first os tag has no product
-          product_found = 0
-          @xml.xpath('./fingerprints/os').each do |os| #loop through each OS tag to find a product
-            if !os.attributes['product'].nil?
-              product_found = 1
-              return os.attributes['product'].value #if any of them have a product, use that
-              break
-            end
-          end
-          if product_found = 0 #if none have a product, use n/a
-            return 'n/a'
-          end
-        else
-          xml_os.attributes['product'].value #if the first OS has a product, use that one
-        end
+        os_product = xml_os.find { |os| os['product'] }
+        os_product ? os_product['product'] : 'n/a'
 
       else
         # nothing found, the tag is valid but not present in this ReportItem
