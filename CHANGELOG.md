@@ -1,4 +1,5 @@
-vX.X.X (XXX 2023)
+v4.11.0 (XXX 2023)
+  - Add port/protocol to evidences
   - Use the details in <os> as the OS node property
   - Fix creating evidence for similar node entries
 
