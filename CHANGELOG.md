@@ -1,7 +1,7 @@
 v4.11.0 (XXX 2023)
   - Add port/protocol to evidences
   - Use the details in <os> as the OS node property
-  - Fix creating evidence for similar node entries
+  - Allow multiple evidence with the same test id & node address
 
 v4.10.0 (September 2023)
   - Update gemspec links
