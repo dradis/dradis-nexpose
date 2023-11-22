@@ -169,7 +169,7 @@ describe 'Nexpose upload plugin' do
       end
     end
 
-    describe 'Importer: Full with duplicate nodes', focus: true do
+    describe 'Importer: Full with duplicate nodes' do
       it 'creates evidence for each instance of the node' do
         expect(@content_service).to receive(:create_node).with(hash_including label: 'Nexpose Scan Summary').once
         expect(@content_service).to receive(:create_node) do |args|
