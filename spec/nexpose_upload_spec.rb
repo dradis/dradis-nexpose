@@ -168,6 +168,25 @@ describe 'Nexpose upload plugin' do
         @importer.import(file: @fixtures_dir + '/full.xml')
       end
     end
+
+    describe 'Importer: Full with duplicate nodes' do
+      it 'creates evidence for each instance of the node' do
+        expect(@content_service).to receive(:create_node).with(hash_including label: 'Nexpose Scan Summary').once
+        expect(@content_service).to receive(:create_node) do |args|
+          expect(args[:label]).to eq('1.1.1.1')
+          expect(args[:type]).to eq(:host)
+          create(:node, args.except(:type))
+        end
+
+        expect(@content_service).to receive(:create_evidence) do |args|
+          expect(args[:content]).to include("#[ID]#\nntp-clock-variables-disclosure\n\n")
+          expect(args[:issue].id).to eq('ntp-clock-variables-disclosure')
+          expect(args[:node].label).to eq('1.1.1.1')
+        end.twice
+
+        @importer.import(file: @fixtures_dir + '/full_with_duplicate_node.xml')
+      end
+    end
   end
 
   it 'parses the fingerprints field' do
