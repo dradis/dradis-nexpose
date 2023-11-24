@@ -9,7 +9,7 @@
         <name>localhost:5000</name>
       </names>
       <fingerprints>
-        <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco" arch="x86_64"/>
+        <os certainty="0.80" family="IOS" vendor="Cisco" arch="x86_64"/>
       </fingerprints>
       <tests/>
       <endpoints>

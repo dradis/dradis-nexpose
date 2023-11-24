@@ -22,7 +22,7 @@ describe 'Nexpose upload plugin' do
       )
 
       @importer = plugin::Importer.new(
-        content_service: @content_service,
+        content_service: @content_service
       )
 
       # Stub dradis-plugins methods
@@ -45,7 +45,6 @@ describe 'Nexpose upload plugin' do
 
     describe 'Importer: Simple' do
       it 'creates nodes, issues, notes and an evidences as needed' do
-
         expect(@content_service).to receive(:create_node).with(hash_including label: '1.1.1.1', type: :host).once
 
         expect(@content_service).to receive(:create_note) do |args|
@@ -189,13 +188,25 @@ describe 'Nexpose upload plugin' do
     end
   end
 
-  it 'parses the fingerprints field' do
-    doc = Nokogiri::XML(File.read(@fixtures_dir + '/full.xml'))
+  describe 'Parsing the node fingerprints field' do
+    it 'uses the os product value' do
+      doc = Nokogiri::XML(File.read(@fixtures_dir + '/full.xml'))
 
-    ts = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Nexpose)
-    ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
-    result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
+      ts = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Nexpose)
+      ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
+      result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
 
-    expect(result).to include('IOS')
+      expect(result).to include('IOS')
+    end
+
+    it 'defaults to n/a if there is no os product value' do
+      doc = Nokogiri::XML(File.read(@fixtures_dir + '/full_with_duplicate_node.xml'))
+
+      ts = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Nexpose)
+      ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
+      result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
+
+      expect(result).to include('n/a')
+    end
   end
 end
