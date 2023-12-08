@@ -58,7 +58,8 @@ module Dradis::Plugins::Nexpose::Formats
             xml_vuln.last_element_child.add_child("<host>#{nexpose_node.address}</host>")
           end
 
-          evidence[test_id][nexpose_node.address] = node_test
+          evidence[test_id][nexpose_node.address] ||= []
+          evidence[test_id][nexpose_node.address] << node_test
         end
 
         nexpose_node.endpoints.each do |endpoint|
