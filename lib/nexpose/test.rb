@@ -6,16 +6,15 @@ module Nexpose
         if xml = xml_node.at_xpath('./Paragraph | ./ContainerBlockElement')
           # get all nested paragraph elements
           nested_paragraphs = xml.xpath('.//Paragraph')
-          content = []
 
-          nested_paragraphs.children.each do |node|
+          content = nested_paragraphs.children.map do |node|
             case node.name
             when 'text'
-              content << node.text.strip
+              node.text.strip
             when 'URLLink'
-              content << node['LinkURL']
+              node['LinkURL']
             end
-          end
+          end.compact
           content.map(&:strip).reject(&:empty?).join("\n")
         else
           'n/a'
