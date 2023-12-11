@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<NexposeReport version="2.0">
+  <scans>
+    <scan endTime="20141110T175832478" id="4" name="USDA_Internal" startTime="20141110T094538362" status="finished"/>
+  </scans>
+  <nodes>
+    <node address="1.1.1.1" device-id="75" risk-score="0.0" scan-template="Edge Standard" site-importance="Normal" site-name="USDA_Internal" status="alive">
+      <names>
+        <name>localhost:5000</name>
+      </names>
+      <fingerprints>
+        <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco" arch="x86_64"/>
+      </fingerprints>
+      <tests/>
+      <endpoints>
+        <endpoint port="123" protocol="udp" status="open">
+          <services>
+            <service name="NTP">
+              <fingerprints>
+                <fingerprint certainty="0.90" family="NTP" product="NTP" vendor="Cisco"/>
+              </fingerprints>
+              <configuration>
+                <config name="ntp.variables">system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,
+
+rootdispersion=108.54, peer=24960, refid=135.89.100.96,
+
+reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,
+
+phase=8.259, freq=-141.24, error=11.32</config>
+              </configuration>
+              <tests>
+                <test id="ntp-clock-variables-disclosure" pci-compliance-status="pass" scan-id="4" status="vulnerable-exploited" vulnerable-since="20141110T161846666">
+                  <Paragraph>
+                    <Paragraph>The following NTP variables were found from a readvar request: system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,
+rootdispersion=108.54, peer=24960, refid=135.89.100.96,
+reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,
+phase=8.259, freq=-141.24, error=11.32</Paragraph>
+                  </Paragraph>
+                </test>
+              </tests>
+            </service>
+          </services>
+        </endpoint>
+        <endpoint port="161" protocol="udp" status="open">
+          <services>
+            <service name="SNMP">
+              <tests/>
+            </service>
+          </services>
+        </endpoint>
+      </endpoints>
+    </node>
+    <node address="1.1.1.1" device-id="75" risk-score="0.0" scan-template="Edge Standard" site-importance="Normal" site-name="USDA_Internal" status="alive">
+      <names>
+        <name>localhost:6000</name>
+      </names>
+      <fingerprints>
+        <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco" arch="x86_64"/>
+      </fingerprints>
+      <tests/>
+      <endpoints>
+        <endpoint port="123" protocol="udp" status="open">
+          <services>
+            <service name="NTP">
+              <fingerprints>
+                <fingerprint certainty="0.90" family="NTP" product="NTP" vendor="Cisco"/>
+              </fingerprints>
+              <configuration>
+                <config name="ntp.variables">system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,
+
+rootdispersion=108.54, peer=24960, refid=135.89.100.96,
+
+reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,
+
+phase=8.259, freq=-141.24, error=11.32</config>
+              </configuration>
+              <tests>
+                <test id="ntp-clock-variables-disclosure" pci-compliance-status="pass" scan-id="4" status="vulnerable-exploited" vulnerable-since="20141110T161846666">
+                  <Paragraph>
+                    <Paragraph>The following NTP variables were found from a readvar request: system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,
+rootdispersion=108.54, peer=24960, refid=135.89.100.96,
+reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,
+phase=8.259, freq=-141.24, error=11.32</Paragraph>
+                  </Paragraph>
+                </test>
+              </tests>
+            </service>
+          </services>
+        </endpoint>
+        <endpoint port="161" protocol="udp" status="open">
+          <services>
+            <service name="SNMP">
+              <tests/>
+            </service>
+          </services>
+        </endpoint>
+      </endpoints>
+    </node>
+  </nodes>
+  <VulnerabilityDefinitions>
+    <vulnerability added="20120412T000000000" cvssScore="4.3" cvssVector="(AV:N/AC:M/Au:N/C:P/I:N/A:N)" id="ntp-clock-variables-disclosure" modified="20131205T000000000" pciSeverity="3" published="20120127T000000000" riskScore="378.27377" severity="4" title="Apache HTTPD: error responses can expose cookies (CVE-2012-0053)">
+      <malware/>
+      <exploits>
+        <exploit id="3479" link="http://www.exploit-db.com/exploits/18442" skillLevel="Expert" title="Apache httpOnly Cookie Disclosure" type="exploitdb"/>
+      </exploits>
+      <description>
+        <ContainerBlockElement>
+          <Paragraph>A flaw was found in the default error response for status code 400.  This flaw could be used by an attacker to expose &quot;httpOnly&quot; cookies when no custom ErrorDocument is specified.</Paragraph>
+        </ContainerBlockElement>
+      </description>
+      <references>
+        <reference source="APPLE">APPLE-SA-2012-09-19-2</reference>
+        <reference source="BID">51706</reference>
+        <reference source="CVE">CVE-2012-0053</reference>
+        <reference source="REDHAT">RHSA-2012:0128</reference>
+        <reference source="SECUNIA">48551</reference>
+        <reference source="URL">http://httpd.apache.org/security/vulnerabilities_20.html</reference>
+        <reference source="URL">http://httpd.apache.org/security/vulnerabilities_22.html</reference>
+      </references>
+      <tags>
+        <tag>Apache</tag>
+        <tag>Apache HTTP Server</tag>
+        <tag>Web</tag>
+      </tags>
+      <solution>
+        <ContainerBlockElement>
+          <Paragraph>Apache HTTPD &gt;= 2.0 and &lt; 2.0.65</Paragraph>
+          <Paragraph>Download and apply the upgrade from:
+
+            <URLLink LinkTitle="http://archive.apache.org/dist/httpd/httpd-2.0.65.tar.gz" LinkURL="http://archive.apache.org/dist/httpd/httpd-2.0.65.tar.gz"/></Paragraph>
+          <Paragraph>Many platforms and distributions provide pre-built binary packages for Apache HTTP server.  These pre-built packages are usually customized and optimized for a particular distribution, therefore we recommend that you use the packages if they are available for your operating system.</Paragraph>
+        </ContainerBlockElement>
+      </solution>
+    </vulnerability>
+  </VulnerabilityDefinitions>
+</NexposeReport>
