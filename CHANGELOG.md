@@ -1,6 +1,7 @@
-v4.11.0 (XXX 2023)
+v4.11.0 (January 2024)
   - Add port/protocol to evidences
   - Use the details in <os> as the OS node property
+  - Import `vulnerability.risk_score` as a new Issue field
   - Allow multiple evidence with the same test id & node address
   - Use 'n/a' as OS node property if there is no product value
 
