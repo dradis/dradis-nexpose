@@ -167,6 +167,22 @@ describe 'Nexpose upload plugin' do
 
         @importer.import(file: @fixtures_dir + '/full.xml')
       end
+
+      it 'formats the list to textile lists' do
+        expect(@content_service).to receive(:create_issue) do |args|
+          expect(args[:text]).to include("#[Title]#\nApache HTTPD: error responses can expose cookies (CVE-2012-0053)")
+          OpenStruct.new(args)
+        end.once
+
+        expect(@content_service).to receive(:create_issue) do |args|
+          expect(args[:text]).to include('* Microsoft Windows')
+          expect(args[:text]).to include('## Open the Windows Control Panel.')
+          expect(args[:text]).to include('## Select "Administrative Tools".')
+          OpenStruct.new(args)
+        end.once
+
+        @importer.import(file: @fixtures_dir + '/full.xml')
+      end
     end
 
     describe 'Importer: Full with duplicate nodes' do

@@ -109,36 +109,27 @@ phase=8.259, freq=-141.24, error=11.32</Paragraph>
         <ContainerBlockElement>
           <UnorderedList>
             <ListItem>
+              <Paragraph>Microsoft Windows</Paragraph>
               <Paragraph>
-                <Paragraph>You can remove inode information from the ETag header by adding the
-    following directive to your Apache config:</Paragraph>
-                <Paragraph preformat="true">FileETag MTime Size</Paragraph>
+                <OrderedList>
+                  <ListItem>Open the Windows Control Panel.</ListItem>
+                  <ListItem>Select &quot;Administrative Tools&quot;.</ListItem>
+                  </OrderedList>
               </Paragraph>
             </ListItem>
             <ListItem>
-              <Paragraph>OpenBSD</Paragraph>
-              <Paragraph>Download and apply the patch from:
-
-
-
-
-
-                <URLLink LinkTitle="http://www.openbsd.org/errata32.html#httpd" LinkURL="http://www.openbsd.org/errata32.html#httpd"/></Paragraph>
+              <Paragraph>Microsoft Windows</Paragraph>
               <Paragraph>
-                <Paragraph>The OpenBSD team has released a
-
-
-
-
-
-                  <URLLink LinkTitle="http://www.openbsd.org/errata32.html#httpd" LinkURL="http://www.openbsd.org/errata32.html#httpd" href="http://www.openbsd.org/errata32.html#httpd">
-                    patch</URLLink>for the Apache inode and pid leak problem.  This patch can be applied
-    cleanly to 3.2 stable and rebuilt.  Restart httpd for the changes to
-    take effect.  OpenBSD 3.3 will ship with the patched httpd by default.
-    The patch can be applied to earlier 3.x versions of OpenBSD, but it
-    may require editing of the source code.</Paragraph>
-              </Paragraph>
-            </ListItem>
+                <OrderedList>
+                  <ListItem>Open the &quot;Performance and Maintenance&quot; control panel.</ListItem>
+                  <ListItem>Select &quot;Administrative Tools&quot;.</ListItem>
+                  <ListItem>Restart the system for the changes to take effect.</ListItem></OrderedList></Paragraph></ListItem>
+            <ListItem>
+              <Paragraph>Microsoft Windows</Paragraph>
+              <Paragraph>
+                <OrderedList>
+                  <ListItem>Open the &quot;Administrative Tools&quot; control panel.</ListItem>
+                  <ListItem>Restart the system for the changes to take effect.</ListItem></OrderedList></Paragraph></ListItem>
           </UnorderedList>
         </ContainerBlockElement>
       </solution>
