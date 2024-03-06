@@ -1,9 +1,13 @@
+v4.12.0 (XXXX 2024)
+  - Update Dradis links in README
+  - Use 'n/a' as OS node property if there is no product value
+
 v4.11.0 (January 2024)
   - Add port/protocol to evidences
   - Use the details in <os> as the OS node property
   - Import `vulnerability.risk_score` as a new Issue field
   - Allow multiple evidence with the same test id & node address
-  - Use 'n/a' as OS node property if there is no product value
+  - Add support for tests that start with `ContainerBlockElement`
 
 v4.10.0 (September 2023)
   - Update gemspec links

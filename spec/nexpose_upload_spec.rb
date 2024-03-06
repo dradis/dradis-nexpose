@@ -118,13 +118,19 @@ describe 'Nexpose upload plugin' do
 
         expect(@content_service).to receive(:create_issue) do |args|
           expect(args[:text]).to include("#[Title]#\nApache HTTPD: ETag Inode Information Leakage (CVE-2003-1418)")
-          expect(args[:id]).to eq('ntp-clock-variables-disclosure')
+          expect(args[:id]).to eq('test-02')
           OpenStruct.new(args)
         end.once
 
         expect(@content_service).to receive(:create_evidence) do |args|
           expect(args[:content]).to include("#[ID]#\nntp-clock-variables-disclosure\n\n")
           expect(args[:issue].id).to eq('ntp-clock-variables-disclosure')
+          expect(args[:node].label).to eq('1.1.1.1')
+        end.once
+
+        expect(@content_service).to receive(:create_evidence) do |args|
+          expect(args[:content]).to include("#[ID]#\ntest-02\n\n")
+          expect(args[:issue].id).to eq('test-02')
           expect(args[:node].label).to eq('1.1.1.1')
         end.once
 
@@ -143,7 +149,7 @@ describe 'Nexpose upload plugin' do
       end
 
       # Regression test for github.com/dradis/dradis-nexpose/issues/1
-      it 'populates solutions regardless they are wrapped in paragraphs or lists' do
+      it 'populates solutions regardless of if they are wrapped in paragraphs or lists' do
         expect(@content_service).to receive(:create_issue) do |args|
           expect(args[:text]).to include("#[Solution]#\n\nApache HTTPD >= 2.0 and < 2.0.65")
           OpenStruct.new(args)
@@ -152,6 +158,20 @@ describe 'Nexpose upload plugin' do
         expect(@content_service).to receive(:create_issue) do |args|
           expect(args[:text]).to include("#[Solution]#\n")
           expect(args[:text]).to include('You can remove inode information from the ETag header')
+          OpenStruct.new(args)
+        end.once
+
+        @importer.import(file: @fixtures_dir + '/full.xml')
+      end
+
+      it 'populates tests regardless of if they contain paragraphs or containerblockelements' do
+        expect(@content_service).to receive(:create_evidence) do |args|
+          expect(args[:content]).to include("#[Content]#\nThe following NTP variables")
+          OpenStruct.new(args)
+        end.once
+  
+        expect(@content_service).to receive(:create_evidence) do |args|
+          expect(args[:content]).to include("#[Content]#\nVulnerable URL:")
           OpenStruct.new(args)
         end.once
 
