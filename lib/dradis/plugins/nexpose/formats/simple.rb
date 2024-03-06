@@ -26,7 +26,7 @@ module Dradis::Plugins::Nexpose::Formats
           port_node = content_service.create_node(label: port_label, parent: host_node)
 
           findings.each do |id, finding|
-            port_text = template_service.process_template(template: 'simple_port', data: {id: id, finding: finding})
+            port_text = mapping_service.apply_mapping(source: 'simple_port', data: {id: id, finding: finding})
             port_text << "\n#[host]#\n#{host['address']}\n\n"
             content_service.create_note node: port_node, text: port_text
           end
