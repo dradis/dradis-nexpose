@@ -2,13 +2,20 @@ module Nexpose
   class Test
     def self.new(xml_node)
       content =
-        if xml_node.at_xpath('./Paragraph')
-          xml_node.
-            at_xpath('./Paragraph').
-            text.
-            split("\n").
-            collect(&:strip).
-            reject { |line| line.empty? }.join("\n")
+        # get first Paragraph or ContainerBlockElement that's a direct child of <test>
+        if xml = xml_node.at_xpath('./Paragraph | ./ContainerBlockElement')
+          # get all nested paragraph elements
+          nested_paragraphs = xml.xpath('.//Paragraph')
+
+          content = nested_paragraphs.children.map do |node|
+            case node.name
+            when 'text'
+              node.text.strip
+            when 'URLLink'
+              node['LinkURL']
+            end
+          end.compact
+          content.map(&:strip).reject(&:empty?).join("\n")
         else
           'n/a'
         end
