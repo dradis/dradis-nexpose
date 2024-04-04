@@ -45,5 +45,60 @@ module Dradis::Plugins::Nexpose
         'References' => '{{ nexpose[port.finding] }}'
       }
     }.freeze
+
+    SOURCE_FIELDS = {
+      full_evidence: [
+        'evidence.id',
+        'evidence.status',
+        'evidence.content',
+        'evidence.port',
+        'evidence.protocol'
+      ],
+      full_node: [
+        'node.address',
+        'node.device_id',
+        'node.fingerprints',
+        'node.hardware_address',
+        'node.names',
+        'node.tests',
+        'node.risk_score',
+        'node.site_name',
+        'node.status',
+        'node.software'
+      ],
+      full_scan: [
+        'scan.end_time',
+        'scan.name',
+        'scan.scan_id',
+        'scan.start_time',
+        'scan.status'
+      ],
+      full_service: [
+        'service.configurations',
+        'service.fingerprints',
+        'service.name',
+        'service.tests'
+      ],
+      full_vulnerability: [
+        'vulnerability.added',
+        'vulnerability.cvss_score',
+        'vulnerability.cvss_vector',
+        'vulnerability.description',
+        'vulnerability.modified',
+        'vulnerability.nexpose_id',
+        'vulnerability.pci_severity',
+        'vulnerability.published',
+        'vulnerability.risk_score',
+        'vulnerability.references',
+        'vulnerability.severity',
+        'vulnerability.solution',
+        'vulnerability.tags',
+        'vulnerability.title'
+      ],
+      simple_port: [
+        'port.finding',
+        'port.id'
+      ]
+    }.freeze
   end
 end
