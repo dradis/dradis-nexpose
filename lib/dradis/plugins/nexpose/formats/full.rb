@@ -148,7 +148,7 @@ module Dradis::Plugins::Nexpose::Formats
           host_node = content_service.create_node(label: host_name, type: :host)
 
           evidence[id][host_name].each do |evidence|
-            evidence_content = template_service.process_template(
+            evidence_content = mapping_service.apply_mapping(
               source: 'full_evidence',
               data: evidence
             )
