@@ -9,16 +9,13 @@ module Dradis::Plugins::Nexpose
       full_node: {
         'Title' => '{{ nexpose[node.address] }}',
         'Hostname' => '{{ nexpose[node.site_name] }}',
-        'Details' => "Status: {{ nexpose[node.status] }}\n
-                      Device id: {{ nexpose[node.device_id] }}\n
-                      HW address: {{ nexpose[node.hardware_address] }}",
+        'Details' => "Status: {{ nexpose[node.status] }}\nDevice id: {{ nexpose[node.device_id] }}\nHW address: {{ nexpose[node.hardware_address] }}",
         'Names' => '{{ nexpose[node.names] }}',
         'Software' => '{{ nexpose[node.software] }}'
       },
       full_scan: {
         'Title' => '{{ nexpose[scan.name] }} ({{ nexpose[scan.scan_id] }})',
-        'Timing' => "Start time: {{ nexpose[scan.start_time] }}\n
-                    End time: {{ nexpose[scan.end_time] }}",
+        'Timing' => "Start time: {{ nexpose[scan.start_time] }}\nEnd time: {{ nexpose[scan.end_time] }}",
         'Status' => '{{ nexpose[scan.status] }}'
       },
       full_service: {
