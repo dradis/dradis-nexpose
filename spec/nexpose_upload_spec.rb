@@ -170,7 +170,7 @@ describe 'Nexpose upload plugin' do
           expect(args[:content]).to include("#[Content]#\nThe following NTP variables")
           OpenStruct.new(args)
         end.once
-  
+
         expect(@content_service).to receive(:create_evidence) do |args|
           expect(args[:content]).to include("#[Content]#\nVulnerable URL:")
           OpenStruct.new(args)
@@ -182,6 +182,15 @@ describe 'Nexpose upload plugin' do
       it 'transforms html entities (&lt; and &gt;)' do
         expect(@content_service).to receive(:create_issue) do |args|
           expect(args[:text]).to include("#[Solution]#\n\nApache HTTPD >= 2.0 and < 2.0.65")
+          OpenStruct.new(args)
+        end
+
+        @importer.import(file: @fixtures_dir + '/full.xml')
+      end
+
+      it 'transforms the <code> markup' do
+        expect(@content_service).to receive(:create_issue) do |args|
+          expect(args[:text]).to include('@httpOnly@')
           OpenStruct.new(args)
         end
 
