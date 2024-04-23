@@ -68,7 +68,7 @@
       </exploits>
       <description>
         <ContainerBlockElement>
-          <Paragraph>A flaw was found in the default error response for status code 400.  This flaw could be used by an attacker to expose &quot;httpOnly&quot; cookies when no custom ErrorDocument is specified.</Paragraph>
+          <Paragraph>A flaw was found in the default error response for status code 400.  This flaw could be used by an attacker to expose <code>httpOnly</code> cookies when no custom ErrorDocument is specified.</Paragraph>
         </ContainerBlockElement>
       </description>
       <references>
