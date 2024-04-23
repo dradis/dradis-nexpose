@@ -9,7 +9,7 @@
         <name>localhost:5000</name>
       </names>
       <fingerprints>
-        <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco"/>
+        <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco" arch="x86_64"/>
       </fingerprints>
       <tests/>
       <endpoints>
@@ -20,22 +20,31 @@
                 <fingerprint certainty="0.90" family="NTP" product="NTP" vendor="Cisco"/>
               </fingerprints>
               <configuration>
-                <config name="ntp.variables">system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,
-
-rootdispersion=108.54, peer=24960, refid=135.89.100.96,
-
-reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,
-
-phase=8.259, freq=-141.24, error=11.32</config>
+                <config name="ntp.variables">system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,rootdispersion=108.54, peer=24960, refid=135.89.100.96,reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,phase=8.259, freq=-141.24, error=11.32</config>
               </configuration>
               <tests>
                 <test id="ntp-clock-variables-disclosure" pci-compliance-status="pass" scan-id="4" status="vulnerable-exploited" vulnerable-since="20141110T161846666">
                   <Paragraph>
-                    <Paragraph>The following NTP variables were found from a readvar request: system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21,
-rootdispersion=108.54, peer=24960, refid=135.89.100.96,
-reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,
-phase=8.259, freq=-141.24, error=11.32</Paragraph>
+                    <Paragraph>The following NTP variables were found from a readvar request: system=&quot;cisco&quot;, leap=0, stratum=5, rootdelay=88.21, rootdispersion=108.54, peer=24960, refid=135.89.100.96, reftime=0xD80BB6B5.715ACDD8, poll=10, clock=0xD80BB78F.8931F3F6,phase=8.259, freq=-141.24, error=11.32</Paragraph>
                   </Paragraph>
+                </test>
+                <test id="test-02" pci-compliance-status="pass" scan-id="4" status="vulnerable-exploited" vulnerable-since="20141110T161846666">
+                  <ContainerBlockElement>
+                    <Paragraph>Vulnerable URL:
+                      <URLLink LinkURL="https://1.2.3.4/" LinkTitle="https://1.2.3.4/"></URLLink>
+                      More info
+                    </Paragraph>
+                    <Paragraph>CRAWL TRAFFIC
+                      Vulnerable response matched:
+                    </Paragraph>
+                    <Paragraph>ATTACK TRAFFIC
+                      Vulnerability proven via 1 attack
+                      <Paragraph>(1) Attack proof:
+                      Attack description:
+                      Missing HTTP header &quot;Content-Security-Policy&quot;
+                      Vulnerable response matched:
+                    </Paragraph></Paragraph>
+                  </ContainerBlockElement>
                 </test>
               </tests>
             </service>
@@ -86,7 +95,7 @@ phase=8.259, freq=-141.24, error=11.32</Paragraph>
         </ContainerBlockElement>
       </solution>
     </vulnerability>
-    <vulnerability added="20120412T000000000" cvssScore="4.3" cvssVector="(AV:N/AC:M/Au:N/C:P/I:N/A:N)" id="ntp-clock-variables-disclosure" modified="20130828T000000000" pciSeverity="3" published="20031231T000000000" riskScore="549.07043" severity="4" title="Apache HTTPD: ETag Inode Information Leakage (CVE-2003-1418)">
+    <vulnerability added="20120412T000000000" cvssScore="4.3" cvssVector="(AV:N/AC:M/Au:N/C:P/I:N/A:N)" id="test-02" modified="20130828T000000000" pciSeverity="3" published="20031231T000000000" riskScore="549.07043" severity="4" title="Apache HTTPD: ETag Inode Information Leakage (CVE-2003-1418)">
       <malware/>
       <exploits/>
       <description>
@@ -110,33 +119,19 @@ phase=8.259, freq=-141.24, error=11.32</Paragraph>
           <UnorderedList>
             <ListItem>
               <Paragraph>
-                <Paragraph>You can remove inode information from the ETag header by adding the
-    following directive to your Apache config:</Paragraph>
+                <Paragraph>You can remove inode information from the ETag header by adding the following directive to your Apache config:</Paragraph>
                 <Paragraph preformat="true">FileETag MTime Size</Paragraph>
               </Paragraph>
             </ListItem>
             <ListItem>
               <Paragraph>OpenBSD</Paragraph>
               <Paragraph>Download and apply the patch from:
-
-
-
-
-
                 <URLLink LinkTitle="http://www.openbsd.org/errata32.html#httpd" LinkURL="http://www.openbsd.org/errata32.html#httpd"/></Paragraph>
               <Paragraph>
                 <Paragraph>The OpenBSD team has released a
-
-
-
-
-
                   <URLLink LinkTitle="http://www.openbsd.org/errata32.html#httpd" LinkURL="http://www.openbsd.org/errata32.html#httpd" href="http://www.openbsd.org/errata32.html#httpd">
-                    patch</URLLink>for the Apache inode and pid leak problem.  This patch can be applied
-    cleanly to 3.2 stable and rebuilt.  Restart httpd for the changes to
-    take effect.  OpenBSD 3.3 will ship with the patched httpd by default.
-    The patch can be applied to earlier 3.x versions of OpenBSD, but it
-    may require editing of the source code.</Paragraph>
+                    patch</URLLink>for the Apache inode and pid leak problem.  This patch can be applied cleanly to 3.2 stable and rebuilt.  Restart httpd for the changes to take effect.  OpenBSD 3.3 will ship with the patched httpd by default. The patch can be applied to earlier 3.x versions of OpenBSD, but it may require editing of the source code.
+                </Paragraph>
               </Paragraph>
             </ListItem>
           </UnorderedList>

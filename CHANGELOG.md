@@ -1,6 +1,17 @@
-v4.X.X (XXXX 2023)
-  - Parse code tags as inline code, not just paragraph preformat tags
-  
+v4.12.0 (XXXX 2024)
+  - Parse code tags as inline code
+  - Update Dradis links in README
+
+v4.11.0 (January 2024)
+  - Add port/protocol to evidences
+  - Use the details in <os> as the OS node property
+  - Import `vulnerability.risk_score` as a new Issue field
+  - Allow multiple evidence with the same test id & node address
+  - Add support for tests that start with `ContainerBlockElement`
+
+v4.10.0 (September 2023)
+  - Update gemspec links
+
 v4.9.0 (June 2023)
   - Parse inline code, not just code blocks
   - Wrap ciphers in the `ssl-weak-message-authentication-code-algorithms` finding
