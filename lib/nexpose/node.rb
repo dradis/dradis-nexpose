@@ -93,7 +93,7 @@ module Nexpose
 
     private
 
-    # returns the first 'product' value found from the passed xpath_selector's children
+    # returns the first 'product' value from the <fingerprints> or <software> element
     def get_fingerprint_product(method_name)
       xpath_selector = {
         'fingerprints' => './fingerprints/os',
