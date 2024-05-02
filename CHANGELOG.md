@@ -1,6 +1,7 @@
-v4.12.0 (XXXX 2024)
-  - Update Dradis links in README
-  - Use 'n/a' as OS node property if there is no product value
+v4.12.0 (Mmmm 2024)
+ - Migrate integration to use Mappings Manager
+ - Update Dradis links in README
+ - Use 'n/a' as OS node property if there is no product value
 
 v4.11.0 (January 2024)
   - Add port/protocol to evidences

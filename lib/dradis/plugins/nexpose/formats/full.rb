@@ -14,7 +14,7 @@ module Dradis::Plugins::Nexpose::Formats
       logger.info { "\tProcessing scan summary" }
 
       doc.xpath('//scans/scan').each do |xml_scan|
-        note_text = template_service.process_template(template: 'full_scan', data: xml_scan)
+        note_text = mapping_service.apply_mapping(source: 'full_scan', data: xml_scan)
         content_service.create_note(node: scan_node, text: note_text)
       end
 
@@ -26,7 +26,7 @@ module Dradis::Plugins::Nexpose::Formats
         logger.info { "\tProcessing host: #{nexpose_node.address}" }
 
         # add the summary note for this host
-        note_text = template_service.process_template(template: 'full_node', data: nexpose_node)
+        note_text = mapping_service.apply_mapping(source: 'full_node', data: nexpose_node)
         content_service.create_note(node: host_node, text: note_text)
 
         if host_node.respond_to?(:properties)
@@ -83,7 +83,7 @@ module Dradis::Plugins::Nexpose::Formats
           endpoint.services.each do |service|
 
             # add the summary note for this service
-            note_text = template_service.process_template(template: 'full_service', data: service)
+            note_text = mapping_service.apply_mapping(source: 'full_service', data: service)
             # content_service.create_note(node: endpoint_node, text: note_text)
             content_service.create_note(node: host_node, text: note_text)
 
@@ -123,8 +123,8 @@ module Dradis::Plugins::Nexpose::Formats
       doc.xpath('//VulnerabilityDefinitions/vulnerability').each do |xml_vulnerability|
         id = xml_vulnerability['id'].downcase
         # if @vuln_list.include?(id)
-        issue_text = template_service.process_template(
-          template: 'full_vulnerability',
+        issue_text = mapping_service.apply_mapping(
+          source: 'full_vulnerability',
           data: xml_vulnerability
         )
 
@@ -148,8 +148,8 @@ module Dradis::Plugins::Nexpose::Formats
           host_node = content_service.create_node(label: host_name, type: :host)
 
           evidence[id][host_name].each do |evidence|
-            evidence_content = template_service.process_template(
-              template: 'full_evidence',
+            evidence_content = mapping_service.apply_mapping(
+              source: 'full_evidence',
               data: evidence
             )
             content_service.create_evidence(content: evidence_content, issue: issue, node: host_node)
