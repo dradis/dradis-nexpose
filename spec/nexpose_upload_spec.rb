@@ -8,11 +8,6 @@ describe 'Nexpose upload plugin' do
 
   describe 'importer' do
     before(:each) do
-      # Stub template service
-      templates_dir = File.expand_path('../../templates', __FILE__)
-      expect_any_instance_of(Dradis::Plugins::TemplateService)
-        .to receive(:default_templates_dir).and_return(templates_dir)
-
       # Init services
       plugin = Dradis::Plugins::Nexpose
 
@@ -169,7 +164,7 @@ describe 'Nexpose upload plugin' do
           expect(args[:content]).to include("#[Content]#\nThe following NTP variables")
           OpenStruct.new(args)
         end.once
-  
+
         expect(@content_service).to receive(:create_evidence) do |args|
           expect(args[:content]).to include("#[Content]#\nVulnerable URL:")
           OpenStruct.new(args)
@@ -208,25 +203,53 @@ describe 'Nexpose upload plugin' do
     end
   end
 
-  describe 'Parsing the node fingerprints field' do
-    it 'uses the os product value' do
-      doc = Nokogiri::XML(File.read(@fixtures_dir + '/full.xml'))
+  describe 'Importer: Full with fingerprints elements' do
+    def apply_mapping(doc, field)
+      ms = Dradis::Plugins::MappingService.new(
+        integration: Dradis::Plugins::Nexpose
+      )
+      mapping_fields = [OpenStruct.new(
+        destination_field: 'Fingerprints',
+        content: "{{ nexpose[#{field}] }}"
+      )]
 
-      ts = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Nexpose)
-      ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
-      result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
-
-      expect(result).to include('IOS')
+      @result = ms.apply_mapping(
+        data: doc.at_xpath('//nodes/node'),
+        mapping_fields: mapping_fields,
+        source: 'full_node'
+      )
     end
 
-    it 'defaults to n/a if there is no os product value' do
-      doc = Nokogiri::XML(File.read(@fixtures_dir + '/full_with_duplicate_node.xml'))
+    describe 'with fingerprints > OS elements' do
+      it 'uses the os product value' do
+        doc = Nokogiri::XML(File.read(@fixtures_dir + '/full.xml'))
+        apply_mapping(doc, 'node.fingerprints')
 
-      ts = Dradis::Plugins::TemplateService.new(plugin: Dradis::Plugins::Nexpose)
-      ts.set_template(template: 'full_node', content: "#[Fingerprints]#\n%node.fingerprints%\n")
-      result = ts.process_template(data: doc.at_xpath('//nodes/node'), template: 'full_node')
+        expect(@result).to include('IOS')
+      end
 
-      expect(result).to include('n/a')
+      it 'defaults to n/a if there is no os product value' do
+        doc = Nokogiri::XML(File.read(@fixtures_dir + '/full_with_duplicate_node.xml'))
+        apply_mapping(doc, 'node.fingerprints')
+
+        expect(@result).to include('n/a')
+      end
+    end
+
+    describe 'with software > fingerprint elements' do
+      it 'uses the product value given software/fingerprints' do
+        doc = Nokogiri::XML(File.read(@fixtures_dir + '/full.xml'))
+        apply_mapping(doc, 'node.software')
+
+        expect(@result).to include('JRE')
+      end
+
+      it 'defaults to n/a if there is no os product value' do
+        doc = Nokogiri::XML(File.read(@fixtures_dir + '/full_with_duplicate_node.xml'))
+        apply_mapping(doc, 'node.software')
+
+        expect(@result).to include('n/a')
+      end
     end
   end
 end
