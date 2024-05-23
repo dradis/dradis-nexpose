@@ -1,11 +1,17 @@
 module Dradis::Plugins::Nexpose
   class ListFormatter
     def format_list(source)
-      # Add <root> node in case the source is group of lists in the same level
+      # Add <root> node in case the source is an invalid xml
       xml = Nokogiri::XML("<root>#{source}</root>") { |conf| conf.noblanks }
-      xml = xml.at_xpath('./root')
+      xml = xml.at_xpath('./root/ContainerBlockElement')
 
-      format_nexpose_list(xml)
+      return source unless xml
+
+      if xml.xpath('./UnorderedList | ./OrderedList').any?
+        format_nexpose_list(xml)
+      else
+        source
+      end
     end
 
     private
