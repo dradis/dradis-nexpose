@@ -1,0 +1,24 @@
+<UnorderedList>
+  <ListItem>
+    <Paragraph>Microsoft Windows</Paragraph>
+    <Paragraph>
+      <OrderedList>
+        <ListItem>Open the Windows Control Panel.</ListItem>
+        <ListItem>Select &quot;Administrative Tools&quot;.</ListItem>
+        </OrderedList>
+    </Paragraph>
+  </ListItem>
+  <ListItem>
+    <Paragraph>Microsoft Windows</Paragraph>
+    <Paragraph>
+      <OrderedList>
+        <ListItem>Open the &quot;Performance and Maintenance&quot; control panel.</ListItem>
+        <ListItem>Select &quot;Administrative Tools&quot;.</ListItem>
+        <ListItem>Restart the system for the changes to take effect.</ListItem></OrderedList></Paragraph></ListItem>
+  <ListItem>
+    <Paragraph>Microsoft Windows</Paragraph>
+    <Paragraph>
+      <OrderedList>
+        <ListItem>Open the &quot;Administrative Tools&quot; control panel.</ListItem>
+        <ListItem>Restart the system for the changes to take effect.</ListItem></OrderedList></Paragraph></ListItem>
+</UnorderedList>
