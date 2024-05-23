@@ -6,17 +6,16 @@ The Nexpose add-on enables users to upload Nexpose XML files to create a structu
 
 This plugin supports both NeXpose-Simple and NeXpose-Full formats.
 
-The add-on requires [Dradis CE](https://dradisframework.org/) > 3.0, or [Dradis Pro](https://dradisframework.com/pro/).
-
+The add-on requires [Dradis CE](https://dradis.com/ce/) > 3.0, or [Dradis Pro](https://dradis.com/).
 
 ## More information
 
-See the Dradis Framework's [README.md](https://github.com/dradis/dradisframework/blob/master/README.md)
+See the Dradis Framework's [README.md](https://github.com/dradis/dradis-ce/blob/develop/README.md)
 
 
 ## Contributing
 
-See the Dradis Framework's [CONTRIBUTING.md](https://github.com/dradis/dradisframework/blob/master/CONTRIBUTING.md)
+See the Dradis Framework's [CONTRIBUTING.md](https://github.com/dradis/dradis-ce/blob/develop/CONTRIBUTING.md)
 
 
 ## License
