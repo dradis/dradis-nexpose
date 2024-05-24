@@ -1,5 +1,11 @@
 module Dradis::Plugins::Nexpose
   class XmlFormatter
+    def format_html_content(source)
+      result = format_list(source)
+
+      cleanup_html(result)
+    end
+
     def cleanup_html(source)
       result = source.to_s
       result.gsub!(/<ContainerBlockElement>(.*?)<\/ContainerBlockElement>/m) { |m| "#{ $1 }" }
@@ -36,21 +42,15 @@ module Dradis::Plugins::Nexpose
       result
     end
 
+   private
+
     def format_list(source)
-      # Add <root> node in case the source is an invalid xml
-      xml = Nokogiri::XML("<root>#{source}</root>") { |conf| conf.noblanks }
-      xml = xml.at_xpath('./root/ContainerBlockElement')
-
-      return source unless xml
-
-      if xml.xpath('./UnorderedList | ./OrderedList').any?
-        format_nexpose_list(xml)
+      if source.xpath('./UnorderedList | ./OrderedList').any?
+        format_nexpose_list(source)
       else
         source
       end
     end
-
-    private
 
     def format_nexpose_list(xml, depth = 1)
       xml.xpath('./UnorderedList | ./OrderedList').map do |list|
@@ -59,18 +59,19 @@ module Dradis::Plugins::Nexpose
         list.xpath('./ListItem').map do |list_item|
           paragraphs = list_item.xpath('./Paragraph')
 
-          list_item_text = if paragraphs.any?
-            paragraphs.map do |paragraph|
-              # <Paragraph> nodes can either have more lists or just text
-              if paragraph.xpath('./UnorderedList | ./OrderedList').any?
-                format_nexpose_list(paragraph, depth + 1)
-              else
-                cleanup_html(paragraph.to_s)
-              end
-            end.join("\n")
-          else
-            list_item.text
-          end
+          list_item_text =
+            if paragraphs.any?
+              paragraphs.map do |paragraph|
+                # <Paragraph> nodes can either have more lists or just text
+                if paragraph.xpath('./UnorderedList | ./OrderedList').any?
+                  format_nexpose_list(paragraph, depth + 1)
+                else
+                  cleanup_html(paragraph.to_s).chomp
+                end
+              end.join("\n")
+            else
+              list_item.text
+            end
 
           ''.ljust(depth, list_item_element) + ' ' + list_item_text
         end.join("\n")

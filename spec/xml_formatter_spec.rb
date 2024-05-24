@@ -6,7 +6,8 @@ describe Dradis::Plugins::Nexpose::XmlFormatter do
   let(:source) { File.read(File.expand_path('../fixtures/files/lists.xml', __FILE__)) }
 
   it 'parses the <UnorderedList> and <OrderedList> elements' do
-    expect(Dradis::Plugins::Nexpose::XmlFormatter.new.format_list(source)).to eq(
+    xml = Nokogiri::XML(source).at_xpath('./ContainerBlockElement')
+    expect(Dradis::Plugins::Nexpose::XmlFormatter.new.format_html_content(xml)).to eq(
       "* Microsoft Windows\n"\
       "## Open the Windows Control Panel.\n"\
       "## Select \"Administrative Tools\".\n"\
