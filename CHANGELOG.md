@@ -1,3 +1,6 @@
+v4.12.0 (Month 2024)
+  - Format UnorderedList/OrderedList to textile
+
 v4.12.0 (May 2024)
  - Migrate integration to use Mappings Manager
  - Update Dradis links in README
