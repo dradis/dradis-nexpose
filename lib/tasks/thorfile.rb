@@ -1,18 +1,18 @@
 class NexposeTasks < Thor
   include Rails.application.config.dradis.thor_helper_module
 
-  namespace "dradis:plugins:nexpose"
+  namespace 'dradis:plugins:nexpose:upload'
 
-  desc "upload_full FILE", "upload NeXpose full results"
-  def upload_full(file_path)
+  desc 'full FILE', 'upload NeXpose full results'
+  def full(file_path)
     detect_and_set_project_scope
 
     importer = Dradis::Plugins::Nexpose::Full::Importer.new(task_options)
     importer.import(file: file_path)
   end
 
-  desc "upload_simple FILE", "upload NeXpose simple results"
-  def upload_simple(file_path)
+  desc 'simple FILE', 'upload NeXpose simple results'
+  def simple(file_path)
     detect_and_set_project_scope
 
     importer = Dradis::Plugins::Nexpose::Simple::Importer.new(task_options)
