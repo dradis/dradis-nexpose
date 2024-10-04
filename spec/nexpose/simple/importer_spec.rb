@@ -1,8 +1,10 @@
+# To run, execute from Dradis main app folder:
+# bin/rspec [dradis-nexpose path]/spec/nexpose/simple/importer_spec.rb
 require 'rails_helper'
 require 'ostruct'
-require File.expand_path('../../../support/spec_macros.rb', __FILE__)
+require File.expand_path('../../../../../dradis-plugins/spec/support/spec_macros.rb', __FILE__)
 
-include SpecMacros
+include Dradis::Plugins::SpecMacros
 
 module Dradis::Plugins
   describe Nexpose::Simple::Importer do
