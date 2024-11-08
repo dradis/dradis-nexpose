@@ -100,11 +100,7 @@ module Nexpose
         'software' => './software/fingerprint'
       }[method_name]
 
-      xml_fingerprint = @xml.xpath(xpath_selector)
-      return '' if xml_fingerprint.nil?
-
-      product = xml_fingerprint.find { |fingerprint| fingerprint['product'] }
-      product ? product['product'] : 'n/a'
+      @xml.at_xpath(xpath_selector + '/@product')&.value || 'n/a'
     end
   end
 end
