@@ -11,7 +11,8 @@ module Dradis::Plugins::Nexpose
         'Hostname' => '{{ nexpose[node.site_name] }}',
         'Details' => "Status: {{ nexpose[node.status] }}\nDevice id: {{ nexpose[node.device_id] }}\nHW address: {{ nexpose[node.hardware_address] }}",
         'Names' => '{{ nexpose[node.names] }}',
-        'Software' => '{{ nexpose[node.software] }}'
+        'Software' => '{{ nexpose[node.software] }}',
+        'Fingerprints' => '{{ nexpose[node.fingerprints] }}'
       },
       full_scan: {
         'Title' => '{{ nexpose[scan.name] }} ({{ nexpose[scan.scan_id] }})',

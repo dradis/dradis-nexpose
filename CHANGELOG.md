@@ -1,4 +1,10 @@
-v4.12.0 (Mmmm 2024)
+v4.14.0 (October 2024)
+- Separate general importer into Full & Simple importers
+
+v4.13.0 (July 2024)
+  - No changes
+
+v4.12.0 (May 2024)
  - Migrate integration to use Mappings Manager
  - Update Dradis links in README
  - Use 'n/a' as OS node property if there is no product value
