@@ -11,6 +11,15 @@
       <fingerprints>
         <os certainty="0.80" family="IOS" product="IOS" vendor="Cisco" arch="x86_64"/>
       </fingerprints>
+      <software>
+        <fingerprint
+          certainty="1.00"
+          software-class="General"
+          vendor="Sun"
+          family="Java"
+          product="JRE"
+          version="1.6.0.22"/>
+      </software>
       <tests/>
       <endpoints>
         <endpoint port="123" protocol="udp" status="open">
