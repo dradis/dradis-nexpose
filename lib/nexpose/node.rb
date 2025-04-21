@@ -83,22 +83,24 @@ module Nexpose
       # Finally the enumerations: names
       if method_name == 'names'
         @xml.xpath('./names/name').collect(&:text)
-
       elsif ['fingerprints', 'software'].include?(method_name)
-
-        xpath_selector = {
-          'fingerprints' => './fingerprints/os',
-          'software' => './software/fingerprint'
-        }[method_name]
-
-        xml_os = @xml.at_xpath(xpath_selector)
-        return '' if xml_os.nil?
-
-        xml_os.attributes['product'].value
+        get_fingerprint_product(method_name)
       else
         # nothing found, the tag is valid but not present in this ReportItem
         return nil
       end
+    end
+
+    private
+
+    # returns the first 'product' value from the <fingerprints> or <software> element
+    def get_fingerprint_product(method_name)
+      xpath_selector = {
+        'fingerprints' => './fingerprints/os',
+        'software' => './software/fingerprint'
+      }[method_name]
+
+      @xml.at_xpath(xpath_selector + '/@product')&.value || 'n/a'
     end
   end
 end
