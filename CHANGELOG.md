@@ -1,4 +1,4 @@
-v4.16.0 (Month 2025)
+v4.16.0 (May 2025)
   - Format UnorderedList/OrderedList to textile
 
 v4.15.0 (December 2024)
