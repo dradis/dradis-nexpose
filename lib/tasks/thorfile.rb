@@ -3,6 +3,10 @@ class NexposeTasks < Thor
 
   namespace 'dradis:plugins:nexpose:upload'
 
+  class_option :state,
+    type: :string,
+    desc: 'The state your issues will be created with. If not provided, the scope will be draft'
+
   desc 'full FILE', 'upload NeXpose full results'
   def full(file_path)
     detect_and_set_project_scope
